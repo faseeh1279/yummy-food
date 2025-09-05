@@ -9,6 +9,6 @@ import { Component, OnInit } from '@angular/core';
 export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
-    console.log("Admin Dashboard working"); 
+    // console.log("Admin Dashboard working"); 
   }
 }
