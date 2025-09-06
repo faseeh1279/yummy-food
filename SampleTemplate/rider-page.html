@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Portal - TastyBites Delivery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .rider-navbar {
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .rider-navbar .navbar-brand {
+            font-weight: 700;
+            color: white;
+        }
+        
+        .rider-navbar .nav-link {
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .rider-navbar .nav-link:hover, 
+        .rider-navbar .nav-link.active {
+            color: white;
+        }
+        
+        .rider-sidebar {
+            background-color: var(--dark);
+            color: white;
+            height: calc(100vh - 76px);
+            position: sticky;
+            top: 76px;
+            padding-top: 20px;
+        }
+        
+        .rider-sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        
+        .rider-sidebar .nav-link:hover, 
+        .rider-sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .rider-sidebar .nav-link i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        
+        .rider-content {
+            padding: 20px;
+            min-height: calc(100vh - 76px);
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .stats-card.primary {
+            border-left-color: var(--primary);
+        }
+        
+        .stats-card.success {
+            border-left-color: var(--success);
+        }
+        
+        .stats-card.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .stats-card.danger {
+            border-left-color: var(--secondary);
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .stats-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .order-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .order-card.new {
+            border-left-color: var(--warning);
+        }
+        
+        .order-card.in-progress {
+            border-left-color: var(--accent);
+        }
+        
+        .order-card.completed {
+            border-left-color: var(--success);
+        }
+        
+        .order-card.cancelled {
+            border-left-color: var(--secondary);
+        }
+        
+        .order-id {
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .order-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-new {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-assigned {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--accent);
+        }
+        
+        .status-picked {
+            background-color: rgba(155, 89, 182, 0.2);
+            color: #9b59b6;
+        }
+        
+        .status-delivered {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--success);
+        }
+        
+        .status-cancelled {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--secondary);
+        }
+        
+        .btn-rider-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-rider-primary:hover {
+            background-color: #1a252f;
+            color: white;
+        }
+        
+        .btn-rider-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-rider-accent:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+        
+        .map-container {
+            height: 300px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .delivery-timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+        
+        .delivery-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: var(--accent);
+        }
+        
+        .timeline-step {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-step::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid var(--accent);
+        }
+        
+        .timeline-step.active::before {
+            background-color: var(--accent);
+        }
+        
+        .timeline-step.completed::before {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        
+        .rider-profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+        }
+        
+        .performance-chart {
+            height: 250px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg rider-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-motorcycle me-2"></i>
+                TastyBites Rider Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#riderNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="riderNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i> John Rider
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 rider-sidebar">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-list-alt"></i>
+                            Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Delivery Map
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-history"></i>
+                            Delivery History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-line"></i>
+                            Performance
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-wallet"></i>
+                            Earnings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-comment-alt"></i>
+                            Feedback
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-10 rider-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Rider Dashboard</h2>
+                    <div class="d-flex">
+                        <button class="btn btn-rider-primary me-2">
+                            <i class="fas fa-sync-alt me-1"></i> Refresh
+                        </button>
+                        <div class="form-check form-switch mt-2">
+                            <input class="form-check-input" type="checkbox" id="availabilitySwitch" checked>
+                            <label class="form-check-label" for="availabilitySwitch">Available for Delivery</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="stats-card primary">
+                            <p class="stats-number">12</p>
+                            <p class="stats-label">Today's Deliveries</p>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-success me-2">+2</span>
+                                <small>from yesterday</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card success">
+                            <p class="stats-number">94%</p>
+                            <p class="stats-label">On-time Rate</p>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-success me-2">+3%</span>
+                                <small>this week</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card warning">
+                            <p class="stats-number">$126.50</p>
+                            <p class="stats-label">Today's Earnings</p>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-success me-2">+$18</span>
+                                <small>from yesterday</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card danger">
+                            <p class="stats-number">1</p>
+                            <p class="stats-label">Issues Reported</p>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-danger me-2">-2</span>
+                                <small>from last week</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Current Deliveries -->
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Current Deliveries</h5>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-secondary active">All</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Assigned</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Picked Up</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!-- Order 1 -->
+                                <div class="order-card new">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="order-id">ORDER #TB28347</span>
+                                        <span class="order-status status-new">NEW</span>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Customer:</strong> Sarah Johnson</p>
+                                            <p class="mb-1"><strong>Delivery Address:</strong> 123 Main St, Apt 4B</p>
+                                            <p class="mb-0"><strong>Distance:</strong> 1.2 miles</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Restaurant:</strong> Bella Italia</p>
+                                            <p class="mb-1"><strong>Order Time:</strong> 12:30 PM</p>
+                                            <p class="mb-0"><strong>Est. Delivery:</strong> 15-20 min</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-light text-dark">2 Items</span>
+                                            <span class="badge bg-light text-dark">$24.50</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-rider-primary me-2">Accept</button>
+                                            <button class="btn btn-sm btn-outline-secondary">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Order 2 -->
+                                <div class="order-card in-progress">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="order-id">ORDER #TB28341</span>
+                                        <span class="order-status status-assigned">ASSIGNED</span>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Customer:</strong> Michael Chen</p>
+                                            <p class="mb-1"><strong>Delivery Address:</strong> 456 Oak Ave</p>
+                                            <p class="mb-0"><strong>Distance:</strong> 0.8 miles</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Restaurant:</strong> Burger Heaven</p>
+                                            <p class="mb-1"><strong>Order Time:</strong> 12:15 PM</p>
+                                            <p class="mb-0"><strong>Est. Delivery:</strong> 10-15 min</p>
+                                        </div>
+                                    </div>
+                                    <div class="delivery-timeline">
+                                        <div class="timeline-step completed">
+                                            <p class="mb-0"><strong>Order Received</strong></p>
+                                            <small class="text-muted">12:15 PM</small>
+                                        </div>
+                                        <div class="timeline-step completed">
+                                            <p class="mb-0"><strong>Preparing Food</strong></p>
+                                            <small class="text-muted">12:20 PM</small>
+                                        </div>
+                                        <div class="timeline-step active">
+                                            <p class="mb-0"><strong>Ready for Pickup</strong></p>
+                                            <small class="text-muted">12:35 PM</small>
+                                        </div>
+                                        <div class="timeline-step">
+                                            <p class="mb-0"><strong>On the Way</strong></p>
+                                        </div>
+                                        <div class="timeline-step">
+                                            <p class="mb-0"><strong>Delivered</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <div>
+                                            <span class="badge bg-light text-dark">3 Items</span>
+                                            <span class="badge bg-light text-dark">$18.75</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-rider-accent me-2">
+                                                <i class="fas fa-store me-1"></i> Picked Up
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">Navigate</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Order 3 -->
+                                <div class="order-card in-progress">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="order-id">ORDER #TB28329</span>
+                                        <span class="order-status status-picked">PICKED UP</span>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Customer:</strong> Emily Williams</p>
+                                            <p class="mb-1"><strong>Delivery Address:</strong> 789 Pine Rd</p>
+                                            <p class="mb-0"><strong>Distance:</strong> 2.1 miles</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Restaurant:</strong> Sushi Palace</p>
+                                            <p class="mb-1"><strong>Order Time:</strong> 12:05 PM</p>
+                                            <p class="mb-0"><strong>Est. Delivery:</strong> 5-10 min</p>
+                                        </div>
+                                    </div>
+                                    <div class="map-container mb-3">
+                                        <!-- Simple map representation -->
+                                        <div class="d-flex justify-content-center align-items-center h-100">
+                                            <div class="text-center">
+                                                <i class="fas fa-map-marked-alt fa-3x text-primary mb-2"></i>
+                                                <p>Live GPS Tracking Active</p>
+                                                <div class="progress" style="height: 5px; width: 80%; margin: 0 auto;">
+                                                    <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <small>4.5/6.0 km completed</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-light text-dark">4 Items</span>
+                                            <span class="badge bg-light text-dark">$32.40</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-success me-2">
+                                                <i class="fas fa-check me-1"></i> Delivered
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">Call Customer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rider Status & Performance -->
+                    <div class="col-lg-4">
+                        <!-- Rider Profile -->
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="rider-profile-img mb-3" alt="Rider Profile">
+                                <h4>John Rider</h4>
+                                <p class="text-muted">Professional Delivery Rider</p>
+                                <div class="d-flex justify-content-around mb-3">
+                                    <div class="text-center">
+                                        <p class="mb-0 fw-bold">4.8</p>
+                                        <small class="text-muted">Rating</small>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="mb-0 fw-bold">1,247</p>
+                                        <small class="text-muted">Deliveries</small>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="mb-0 fw-bold">98%</p>
+                                        <small class="text-muted">Satisfaction</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit me-1"></i> Edit Profile
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Today's Performance -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Today's Performance</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="performance-chart mb-3">
+                                    <!-- Simple chart representation -->
+                                    <div class="d-flex justify-content-center align-items-center h-100">
+                                        <div class="text-center">
+                                            <i class="fas fa-chart-pie fa-3x text-primary mb-2"></i>
+                                            <p>Performance Metrics</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <p class="mb-0 fw-bold">12/13</p>
+                                        <small class="text-muted">On Time</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="mb-0 fw-bold">45 min</p>
+                                        <small class="text-muted">Avg. Time</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="mb-0 fw-bold">$126.50</p>
+                                        <small class="text-muted">Earnings</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Quick Actions</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-rider-accent mb-2">
+                                        <i class="fas fa-map-marker-alt me-2"></i> View Delivery Map
+                                    </button>
+                                    <button class="btn btn-outline-primary mb-2">
+                                        <i class="fas fa-money-bill-wave me-2"></i> View Earnings
+                                    </button>
+                                    <button class="btn btn-outline-primary mb-2">
+                                        <i class="fas fa-list-alt me-2"></i> Delivery History
+                                    </button>
+                                    <button class="btn btn-outline-primary mb-2">
+                                        <i class="fas fa-headset me-2"></i> Support Center
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple JavaScript for the rider portal
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle availability status
+            const availabilitySwitch = document.getElementById('availabilitySwitch');
+            availabilitySwitch.addEventListener('change', function() {
+                if (this.checked) {
+                    alert('You are now available for deliveries');
+                } else {
+                    alert('You are now unavailable for deliveries');
+                }
+            });
+
+            // Simulate order acceptance
+            const acceptButtons = document.querySelectorAll('.btn-rider-primary');
+            acceptButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderCard = this.closest('.order-card');
+                    const orderId = orderCard.querySelector('.order-id').textContent;
+                    this.textContent = 'Accepted';
+                    this.classList.remove('btn-rider-primary');
+                    this.classList.add('btn-success');
+                    this.disabled = true;
+                    
+                    // Change status
+                    const statusBadge = orderCard.querySelector('.order-status');
+                    statusBadge.textContent = 'ASSIGNED';
+                    statusBadge.className = 'order-status status-assigned';
+                    
+                    alert(`You have accepted ${orderId}`);
+                });
+            });
+
+            // Simulate order status updates
+            const statusButtons = document.querySelectorAll('.btn-rider-accent, .btn-success');
+            statusButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('btn-rider-accent')) {
+                        // Picked Up button
+                        this.textContent = 'Picked Up';
+                        this.classList.remove('btn-rider-accent');
+                        this.classList.add('btn-success');
+                        
+                        // Change status
+                        const orderCard = this.closest('.order-card');
+                        const statusBadge = orderCard.querySelector('.order-status');
+                        statusBadge.textContent = 'PICKED UP';
+                        statusBadge.className = 'order-status status-picked';
+                        
+                        alert('Order marked as picked up');
+                    } else if (this.classList.contains('btn-success') && this.textContent.includes('Delivered')) {
+                        // Delivered button
+                        this.textContent = 'Delivered';
+                        this.disabled = true;
+                        
+                        // Change status
+                        const orderCard = this.closest('.order-card');
+                        const statusBadge = orderCard.querySelector('.order-status');
+                        statusBadge.textContent = 'DELIVERED';
+                        statusBadge.className = 'order-status status-delivered';
+                        
+                        alert('Order marked as delivered');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

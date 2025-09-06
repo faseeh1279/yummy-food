@@ -9,7 +9,6 @@ export const routes: Routes = [
     {
         path: "auth",
         loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule), 
-        data: { showLayout: false }, 
     }, 
     {
         path: 'admin',
@@ -18,6 +17,5 @@ export const routes: Routes = [
     { 
         path: 'customer',
         loadChildren: () => import('./features/customer/customer.module').then(m => m.CustomerModule), 
-        data: { showLayout: true }, // Hide layout for all auth routes
     }
 ];

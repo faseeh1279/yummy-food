@@ -6,7 +6,7 @@ import { UploadItemComponent } from './components/forms/upload-item/upload-item.
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { ItemDetailsComponent } from "./components/tables/item-details/item-details.component";
-
+// import { ChartsModule } from 'ng2-charts';
 const routes: Routes = [
   {
     path: "", 

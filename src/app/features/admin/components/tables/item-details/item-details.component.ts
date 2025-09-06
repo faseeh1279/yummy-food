@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
-import { ItemDetails } from '../../../models/admin.model';
 
 @Component({
   selector: 'app-item-details',
@@ -12,7 +11,6 @@ import { ItemDetails } from '../../../models/admin.model';
 
 
 export class ItemDetailsComponent implements OnInit{
-public itemDetails: ItemDetails[] = [];
 
   constructor(private adminService: AdminService) {}
 
@@ -21,13 +19,13 @@ public itemDetails: ItemDetails[] = [];
   }
 
   fetchItems(): void {
-    this.adminService.fetchItems().subscribe({
-      next: (result) => {
-        this.itemDetails = result;
-      },
-      error: (err) => {
-        console.error('Error fetching items', err);
-      }
-    });
+    // this.adminService.fetchItems().subscribe({
+    //   next: (result) => {
+    //     this.itemDetails = result;
+    //   },
+    //   error: (err) => {
+    //     console.error('Error fetching items', err);
+    //   }
+    // });
   }
 }

@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBites - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --secondary: #2b2d42;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7f9;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background: var(--secondary);
+            color: white;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .sidebar-header h3 {
+            color: white;
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .sidebar-header span {
+            color: var(--primary);
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 10px 20px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu li:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-menu i {
+            width: 25px;
+            text-align: center;
+        }
+        
+        .sidebar-menu .active {
+            background: var(--primary);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .page-title h2 {
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background: white;
+            border-bottom: 1px solid #eee;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin: 10px 0;
+            color: var(--secondary);
+        }
+        
+        .stat-card p {
+            color: #6c757d;
+            margin: 0;
+        }
+        
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            margin: 0;
+        }
+        
+        th {
+            background: #f8f9fa !important;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        /* Forms */
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #e1e5eb;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        /* Dashboard Sections */
+        .dashboard-section {
+            display: none;
+        }
+        
+        .dashboard-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-img {
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+                text-align: center;
+            }
+            
+            .sidebar-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            .sidebar-menu span {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Status badges */
+        .badge {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Order status colors */
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-preparing {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-delivering {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Complaint status colors */
+        .complaint-open {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .complaint-inprogress {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .complaint-resolved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .complaint-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Modal enhancements */
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+
+        .modal-footer {
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>Tasty<span>Bites</span></h3>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li class="active" data-section="dashboard">
+                    <a href="#"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+                </li>
+                <li data-section="products">
+                    <a href="#"><i class="fas fa-utensils"></i> <span>Products</span></a>
+                </li>
+                <li data-section="categories">
+                    <a href="#"><i class="fas fa-list"></i> <span>Categories</span></a>
+                </li>
+                <li data-section="orders">
+                    <a href="#"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a>
+                </li>
+                <li data-section="customers">
+                    <a href="#"><i class="fas fa-users"></i> <span>Customers</span></a>
+                </li>
+                <li data-section="riders">
+                    <a href="#"><i class="fas fa-motorcycle"></i> <span>Riders</span></a>
+                </li>
+                <li data-section="complaints">
+                    <a href="#"><i class="fas fa-exclamation-circle"></i> <span>Complaints</span></a>
+                </li>
+                <li data-section="analytics">
+                    <a href="#"><i class="fas fa-chart-line"></i> <span>Analytics</span></a>
+                </li>
+                <li data-section="settings">
+                    <a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <div class="page-title">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=ff6b35&color=fff" alt="Admin User">
+                <div>
+                    <h6 class="mb-0">Admin User</h6>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="dashboard-section active">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card stat-card slide-in" style="animation-delay: 0.1s;">
+                        <div class="card-body">
+                            <i class="fas fa-utensils"></i>
+                            <h3>42</h3>
+                            <p>Total Products</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card slide-in" style="animation-delay: 0.2s;">
+                        <div class="card-body">
+                            <i class="fas fa-users"></i>
+                            <h3>156</h3>
+                            <p>Total Customers</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card slide-in" style="animation-delay: 0.3s;">
+                        <div class="card-body">
+                            <i class="fas fa-motorcycle"></i>
+                            <h3>8</h3>
+                            <p>Total Riders</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card slide-in" style="animation-delay: 0.4s;">
+                        <div class="card-body">
+                            <i class="fas fa-shopping-cart"></i>
+                            <h3>128</h3>
+                            <p>Total Orders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Sales Analytics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recent Orders</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                <div class="list-group-item border-0">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="mb-1">Order #1234</h6>
+                                        <small>10 mins ago</small>
+                                    </div>
+                                    <p class="mb-1">2 Pizzas, 1 Coke</p>
+                                    <small class="badge status-pending">Pending</small>
+                                </div>
+                                <div class="list-group-item border-0">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="mb-1">Order #1235</h6>
+                                        <small>25 mins ago</small>
+                                    </div>
+                                    <p class="mb-1">Burger, Fries</p>
+                                    <small class="badge status-preparing">Preparing</small>
+                                </div>
+                                <div class="list-group-item border-0">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="mb-1">Order #1236</h6>
+                                        <small>1 hour ago</small>
+                                    </div>
+                                    <p class="mb-1">Pasta, Garlic Bread</p>
+                                    <small class="badge status-delivering">Delivering</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div id="products" class="dashboard-section">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Product Management</h5>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Discount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td><img src="https://via.placeholder.com/50" class="rounded" alt="Product"></td>
+                                    <td>Margherita Pizza</td>
+                                    <td>Pizza</td>
+                                    <td>$12.99</td>
+                                    <td>10%</td>
+                                    <td><span class="badge bg-success">Available</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editProductModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><img src="https://via.placeholder.com/50" class="rounded" alt="Product"></td>
+                                    <td>Beef Burger</td>
+                                    <td>Burger</td>
+                                    <td>$8.99</td>
+                                    <td>-</td>
+                                    <td><span class="badge bg-success">Available</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editProductModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><img src="https://via.placeholder.com/50" class="rounded" alt="Product"></td>
+                                    <td>Caesar Salad</td>
+                                    <td>Salad</td>
+                                    <td>$7.99</td>
+                                    <td>5%</td>
+                                    <td><span class="badge bg-warning">Low Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editProductModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div id="categories" class="dashboard-section">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Category Management</h5>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                        <i class="fas fa-plus"></i> Add Category
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Category</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Pizza</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Burger</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Salad</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6>Products by Category</h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="categoryChart" height="250"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="orders" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Phone</th>
+                                    <th>Created At</th>
+                                    <th>Total Price</th>
+                                    <th>Status</th>
+                                    <th>Rider</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#1234</td>
+                                    <td>John Doe</td>
+                                    <td>(123) 456-7890</td>
+                                    <td>2023-07-15 12:30</td>
+                                    <td>$32.97</td>
+                                    <td><span class="badge status-pending">Pending</span></td>
+                                    <td>Not Assigned</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#orderDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#1235</td>
+                                    <td>Jane Smith</td>
+                                    <td>(123) 456-7891</td>
+                                    <td>2023-07-15 11:45</td>
+                                    <td>$24.50</td>
+                                    <td><span class="badge status-preparing">Preparing</span></td>
+                                    <td>Not Assigned</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#orderDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#1236</td>
+                                    <td>Robert Johnson</td>
+                                    <td>(123) 456-7892</td>
+                                    <td>2023-07-15 10:20</td>
+                                    <td>$18.75</td>
+                                    <td><span class="badge status-delivering">Delivering</span></td>
+                                    <td>Mike Johnson</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#orderDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customers Section -->
+        <div id="customers" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Customer Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Orders</th>
+                                    <th>Complaint Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>John Doe</td>
+                                    <td>john@example.com</td>
+                                    <td>(123) 456-7890</td>
+                                    <td>15</td>
+                                    <td><span class="badge bg-success">No Complaints</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewCustomerModal"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#blockCustomerModal"><i class="fas fa-ban"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Jane Smith</td>
+                                    <td>jane@example.com</td>
+                                    <td>(123) 456-7891</td>
+                                    <td>8</td>
+                                    <td><span class="badge bg-success">No Complaints</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewCustomerModal"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#blockCustomerModal"><i class="fas fa-ban"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Robert Johnson</td>
+                                    <td>robert@example.com</td>
+                                    <td>(123) 456-7892</td>
+                                    <td>3</td>
+                                    <td><span class="badge bg-warning">Active Complaint</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewCustomerModal"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#blockCustomerModal"><i class="fas fa-ban"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Riders Section -->
+        <div id="riders" class="dashboard-section">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Rider Management</h5>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRiderModal">
+                        <i class="fas fa-plus"></i> Add Rider
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>CNIC</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Orders Delivered</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Mike Johnson</td>
+                                    <td>12345-6789012-3</td>
+                                    <td>(123) 456-7893</td>
+                                    <td>mike@example.com</td>
+                                    <td>42</td>
+                                    <td><span class="badge bg-success">Available</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRiderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRiderModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Sarah Williams</td>
+                                    <td>12345-6789012-4</td>
+                                    <td>(123) 456-7894</td>
+                                    <td>sarah@example.com</td>
+                                    <td>28</td>
+                                    <td><span class="badge bg-warning">On Delivery</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRiderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRiderModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>David Brown</td>
+                                    <td>12345-6789012-5</td>
+                                    <td>(123) 456-7895</td>
+                                    <td>david@example.com</td>
+                                    <td>35</td>
+                                    <td><span class="badge bg-danger">Offline</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRiderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRiderModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complaints Section -->
+        <div id="complaints" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Complaint Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Complaint Name</th>
+                                    <th>Description</th>
+                                    <th>From</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Late Delivery</td>
+                                    <td>Order was delivered 30 minutes late</td>
+                                    <td>John Doe (Customer)</td>
+                                    <td><span class="badge complaint-open">Open</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editComplaintModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#complaintDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Wrong Order</td>
+                                    <td>Received wrong items in the order</td>
+                                    <td>Jane Smith (Customer)</td>
+                                    <td><span class="badge complaint-inprogress">In Progress</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editComplaintModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#complaintDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Rude Behavior</td>
+                                    <td>Rider was rude during delivery</td>
+                                    <td>Mike Johnson (Rider)</td>
+                                    <td><span class="badge complaint-resolved">Resolved</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editComplaintModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#complaintDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div id="analytics" class="dashboard-section">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Revenue Analytics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Top Products</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                <div class="list-group-item border-0 d-flex justify-content-between align-items-center">
+                                    <div>Margherita Pizza</div>
+                                    <span class="badge bg-primary rounded-pill">42 sales</span>
+                                </div>
+                                <div class="list-group-item border-0 d-flex justify-content-between align-items-center">
+                                    <div>Beef Burger</div>
+                                    <span class="badge bg-primary rounded-pill">38 sales</span>
+                                </div>
+                                <div class="list-group-item border-0 d-flex justify-content-between align-items-center">
+                                    <div>Chicken Wings</div>
+                                    <span class="badge bg-primary rounded-pill">35 sales</span>
+                                </div>
+                                <div class="list-group-item border-0 d-flex justify-content-between align-items-center">
+                                    <div>Caesar Salad</div>
+                                    <span class="badge bg-primary rounded-pill">28 sales</span>
+                                </div>
+                                <div class="list-group-item border-0 d-flex justify-content-between align-items-center">
+                                    <div>Vegetable Pasta</div>
+                                    <span class="badge bg-primary rounded-pill">25 sales</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">System Settings</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="restaurantName" class="form-label">Restaurant Name</label>
+                                <input type="text" class="form-control" id="restaurantName" value="TastyBites">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="phoneNumber" value="(123) 456-7890">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailAddress" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="emailAddress" value="info@tastybites.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" rows="2">123 Main Street, City, Country</textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="deliveryFee" class="form-label">Delivery Fee ($)</label>
+                                <input type="number" class="form-control" id="deliveryFee" value="2.99">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="minOrder" class="form-label">Minimum Order ($)</label>
+                                <input type="number" class="form-control" id="minOrder" value="10.00">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="taxRate" class="form-label">Tax Rate (%)</label>
+                                <input type="number" class="form-control" id="taxRate" value="7.5">
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="onlineOrders" checked>
+                            <label class="form-check-label" for="onlineOrders">Accept Online Orders</label>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="deliveryService" checked>
+                            <label class="form-check-label" for="deliveryService">Enable Delivery Service</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modals -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="productName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="productCategory" class="form-label">Category</label>
+                            <select class="form-select" id="productCategory">
+                                <option selected>Select Category</option>
+                                <option value="pizza">Pizza</option>
+                                <option value="burger">Burger</option>
+                                <option value="pasta">Pasta</option>
+                                <option value="salad">Salad</option>
+                                <option value="drink">Drinks</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productPrice" class="form-label">Price ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="productPrice">
+                        </div>
+                        <div class="mb-3">
+                            <label for="productDiscount" class="form-label">Discount (%)</label>
+                            <input type="number" step="0.01" class="form-control" id="productDiscount">
+                        </div>
+                        <div class="mb-3">
+                            <label for="productDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="productDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productImage" class="form-label">Product Image</label>
+                            <input class="form-control" type="file" id="productImage">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="productStatus" checked>
+                            <label class="form-check-label" for="productStatus">Available</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Add Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="editProductName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="editProductName" value="Margherita Pizza">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProductCategory" class="form-label">Category</label>
+                            <select class="form-select" id="editProductCategory">
+                                <option>Select Category</option>
+                                <option value="pizza" selected>Pizza</option>
+                                <option value="burger">Burger</option>
+                                <option value="pasta">Pasta</option>
+                                <option value="salad">Salad</option>
+                                <option value="drink">Drinks</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProductPrice" class="form-label">Price ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="editProductPrice" value="12.99">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProductDiscount" class="form-label">Discount (%)</label>
+                            <input type="number" step="0.01" class="form-control" id="editProductDiscount" value="10">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProductDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editProductDescription" rows="3">Classic pizza with tomato sauce and mozzarella cheese</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProductImage" class="form-label">Product Image</label>
+                            <input class="form-control" type="file" id="editProductImage">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="editProductStatus" checked>
+                            <label class="form-check-label" for="editProductStatus">Available</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong>Margherita Pizza</strong>? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger">Delete Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Modals -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="categoryName" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" id="categoryName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Add Category</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="editCategoryName" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" id="editCategoryName" value="Pizza">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCategoryDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editCategoryDescription" rows="3">All types of pizzas</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the <strong>Pizza</strong> category? This will affect all products in this category.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger">Delete Category</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modals -->
+    <div class="modal fade" id="editOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Order Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="orderStatus" class="form-label">Order Status</label>
+                            <select class="form-select" id="orderStatus">
+                                <option value="pending">Pending</option>
+                                <option value="preparing">Preparing</option>
+                                <option value="delivering">Delivering</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignRider" class="form-label">Assign Rider</label>
+                            <select class="form-select" id="assignRider">
+                                <option value="">Select Rider</option>
+                                <option value="1">Mike Johnson</option>
+                                <option value="2">Sarah Williams</option>
+                                <option value="3">David Brown</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Update Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details - #1234</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Customer Information</h6>
+                            <p><strong>Name:</strong> John Doe</p>
+                            <p><strong>Phone:</strong> (123) 456-7890</p>
+                            <p><strong>Email:</strong> john@example.com</p>
+                            <p><strong>Address:</strong> 123 Main St, City, Country</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Order Information</h6>
+                            <p><strong>Order Date:</strong> July 15, 2023 12:30 PM</p>
+                            <p><strong>Status:</strong> <span class="badge status-pending">Pending</span></p>
+                            <p><strong>Payment Method:</strong> Credit Card</p>
+                            <p><strong>Total Amount:</strong> $32.97</p>
+                        </div>
+                    </div>
+                    
+                    <h6>Order Items</h6>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Margherita Pizza</td>
+                                    <td>2</td>
+                                    <td>$12.99</td>
+                                    <td>$25.98</td>
+                                </tr>
+                                <tr>
+                                    <td>Coke</td>
+                                    <td>1</td>
+                                    <td>$2.99</td>
+                                    <td>$2.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Delivery Fee</td>
+                                    <td>1</td>
+                                    <td>$2.99</td>
+                                    <td>$2.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Tax</td>
+                                    <td>1</td>
+                                    <td>$1.01</td>
+                                    <td>$1.01</td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td colspan="3" class="text-end">Total:</td>
+                                    <td>$32.97</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Modals -->
+    <div class="modal fade" id="viewCustomerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customer Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://ui-avatars.com/api/?name=John+Doe&size=120" class="rounded-circle mb-2" alt="Customer">
+                        <h4>John Doe</h4>
+                        <p class="text-muted">Customer since: Jan 2023</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Contact Information</h6>
+                            <p><strong>Email:</strong> john@example.com</p>
+                            <p><strong>Phone:</strong> (123) 456-7890</p>
+                            <p><strong>Address:</strong> 123 Main St, City, Country</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Order Statistics</h6>
+                            <p><strong>Total Orders:</strong> 15</p>
+                            <p><strong>Total Spent:</strong> $342.50</p>
+                            <p><strong>Last Order:</strong> July 15, 2023</p>
+                            <p><strong>Status:</strong> <span class="badge bg-success">Active</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6>Recent Orders</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Order #1234
+                                <span class="badge status-completed">Completed</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Order #1235
+                                <span class="badge status-completed">Completed</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Order #1236
+                                <span class="badge status-delivering">Delivering</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="blockCustomerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Block Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to block <strong>John Doe</strong>? This will prevent them from placing new orders.</p>
+                    <div class="mb-3">
+                        <label for="blockReason" class="form-label">Reason for blocking</label>
+                        <textarea class="form-control" id="blockReason" rows="3" placeholder="Enter reason for blocking this customer"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger">Block Customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rider Modals -->
+    <div class="modal fade" id="addRiderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Rider</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="riderFirstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="riderFirstName">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="riderLastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="riderLastName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="riderEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="riderEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="riderPhone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="riderPhone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="riderCNIC" class="form-label">CNIC</label>
+                            <input type="text" class="form-control" id="riderCNIC" placeholder="XXXXX-XXXXXXX-X">
+                        </div>
+                        <div class="mb-3">
+                            <label for="riderVehicle" class="form-label">Vehicle Type</label>
+                            <select class="form-select" id="riderVehicle">
+                                <option selected>Select Vehicle</option>
+                                <option value="motorcycle">Motorcycle</option>
+                                <option value="scooter">Scooter</option>
+                                <option value="bicycle">Bicycle</option>
+                                <option value="car">Car</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="riderLicense" class="form-label">License Number</label>
+                            <input type="text" class="form-control" id="riderLicense">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Add Rider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editRiderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Rider</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editRiderFirstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="editRiderFirstName" value="Mike">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editRiderLastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="editRiderLastName" value="Johnson">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRiderEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editRiderEmail" value="mike@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRiderPhone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="editRiderPhone" value="(123) 456-7893">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRiderCNIC" class="form-label">CNIC</label>
+                            <input type="text" class="form-control" id="editRiderCNIC" value="12345-6789012-3">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRiderVehicle" class="form-label">Vehicle Type</label>
+                            <select class="form-select" id="editRiderVehicle">
+                                <option value="motorcycle" selected>Motorcycle</option>
+                                <option value="scooter">Scooter</option>
+                                <option value="bicycle">Bicycle</option>
+                                <option value="car">Car</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRiderLicense" class="form-label">License Number</label>
+                            <input type="text" class="form-control" id="editRiderLicense" value="LIC123456">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="editRiderStatus" checked>
+                            <label class="form-check-label" for="editRiderStatus">Active</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteRiderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Rider</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete rider <strong>Mike Johnson</strong>? This action cannot be undone.</p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> Note: If this rider has active deliveries, they will be reassigned.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger">Delete Rider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complaint Modals -->
+    <div class="modal fade" id="editComplaintModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Complaint</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="complaintStatus" class="form-label">Status</label>
+                            <select class="form-select" id="complaintStatus">
+                                <option value="open">Open</option>
+                                <option value="inprogress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="complaintPriority" class="form-label">Priority</label>
+                            <select class="form-select" id="complaintPriority">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="complaintNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="complaintNotes" rows="3" placeholder="Add notes about this complaint"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Update Complaint</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="complaintDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Complaint Details - #1</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Complaint Information</h6>
+                            <p><strong>Title:</strong> Late Delivery</p>
+                            <p><strong>Status:</strong> <span class="badge complaint-open">Open</span></p>
+                            <p><strong>Priority:</strong> <span class="badge bg-warning">Medium</span></p>
+                            <p><strong>Date Submitted:</strong> July 15, 2023 1:45 PM</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Submitted By</h6>
+                            <p><strong>Name:</strong> John Doe</p>
+                            <p><strong>Phone:</strong> (123) 456-7890</p>
+                            <p><strong>Email:</strong> john@example.com</p>
+                            <p><strong>User Type:</strong> Customer</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Description</h6>
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="mb-0">My order was delivered 30 minutes later than the estimated delivery time. The food was cold when it arrived.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Related Order</h6>
+                        <div class="card">
+                            <div class="card-body">
+                                <p><strong>Order #1234</strong> - July 15, 2023</p>
+                                <p>2 Pizzas, 1 Coke - Total: $32.97</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h6>Activity Log</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <span>Complaint submitted by customer</span>
+                                    <small class="text-muted">July 15, 2023 1:45 PM</small>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <span>Assigned to admin for review</span>
+                                    <small class="text-muted">July 15, 2023 2:00 PM</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation
+            const menuItems = document.querySelectorAll('.sidebar-menu li');
+            const sections = document.querySelectorAll('.dashboard-section');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetSection = this.getAttribute('data-section');
+                    
+                    // Update active menu item
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show target section
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetSection) {
+                            section.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Charts
+            const salesChart = new Chart(document.getElementById('salesChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Sales ($)',
+                        data: [1250, 1900, 1800, 2100, 2400, 2800],
+                        borderColor: '#ff6b35',
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: 'rgba(255, 107, 53, 0.1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            const revenueChart = new Chart(document.getElementById('revenueChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Pizza', 'Burger', 'Pasta', 'Salad', 'Drinks'],
+                    datasets: [{
+                        label: 'Revenue by Category ($)',
+                        data: [4200, 3200, 1800, 1200, 900],
+                        backgroundColor: [
+                            'rgba(255, 107, 53, 0.8)',
+                            'rgba(43, 45, 66, 0.8)',
+                            'rgba(255, 193, 7, 0.8)',
+                            'rgba(40, 167, 69, 0.8)',
+                            'rgba(23, 162, 184, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            const categoryChart = new Chart(document.getElementById('categoryChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pizza', 'Burger', 'Pasta', 'Salad', 'Drinks'],
+                    datasets: [{
+                        data: [12, 8, 6, 5, 10],
+                        backgroundColor: [
+                            '#ff6b35',
+                            '#2b2d42',
+                            '#ffc107',
+                            '#28a745',
+                            '#17a2b8'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Animation for cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Simulate API calls for data
+            function loadData() {
+                console.log("Loading data from API...");
+                // In a real application, you would fetch data from your API endpoints
+                // and update the UI accordingly
+            }
+
+            // Initialize the dashboard
+            loadData();
+        });
+    </script>
+</body>
+</html>

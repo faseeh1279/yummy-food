@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBites - Order Food Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --secondary: #2b2d42;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7f9;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .navbar-brand span {
+            color: var(--secondary);
+        }
+        
+        .nav-link {
+            color: var(--secondary);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .cart-icon, .notification-icon {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .cart-count, .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 40px;
+        }
+        
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Product Card */
+        .product-card {
+            height: 100%;
+        }
+        
+        .product-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .product-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Buttons */
+        .btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1050;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .cart-sidebar.open {
+            right: 0;
+        }
+        
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            display: none;
+        }
+        
+        .cart-overlay.open {
+            display: block;
+        }
+        
+        /* Notification Sidebar */
+        .notification-sidebar {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1050;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .notification-sidebar.open {
+            left: 0;
+        }
+        
+        /* Offer Badges */
+        .offer-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        /* Category Navigation */
+        .category-nav {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .category-item {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .category-item:hover, .category-item.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .category-item i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        /* Order History */
+        .order-card {
+            border-left: 4px solid var(--primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cart-sidebar, .notification-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .notification-sidebar {
+                left: -100%;
+            }
+            
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Cart Items */
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .cart-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            font-weight: 600;
+        }
+        
+        /* Offers Section */
+        .offer-card {
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            color: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .offer-card .card-body {
+            padding: 20px;
+        }
+        
+        /* Checkout Form */
+        .checkout-form {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #e1e5eb;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+            border-color: var(--primary);
+        }
+        
+        /* Order Status */
+        .status-badge {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-preparing {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-delivering {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        /* Section Titles */
+        .section-title {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        /* Floating Action Button */
+        .floating-cart-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+        
+        .floating-cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Auth Modals */
+        .auth-modal .modal-content {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .auth-modal .modal-header {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .auth-form {
+            padding: 20px;
+        }
+        
+        /* Dashboard Sections */
+        .dashboard-section {
+            display: none;
+        }
+        
+        .dashboard-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        /* Notification Items */
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .notification-item.unread {
+            background: #f0f7ff;
+        }
+        
+        .notification-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        /* Checkout Page */
+        .checkout-section {
+            display: none;
+        }
+        
+        .checkout-section.active {
+            display: block;
+        }
+        
+        .payment-method {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover, .payment-method.selected {
+            border-color: var(--primary);
+            background: #fff9f7;
+        }
+        
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light container">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Tasty<span>Bites</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-section="home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="menu">Menu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="offers">Offers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="orders">My Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="about">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="contact">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <div class="notification-icon me-3 position-relative" id="notificationButton">
+                            <i class="fas fa-bell fa-lg"></i>
+                            <span class="notification-count">3</span>
+                        </div>
+                        <div class="cart-icon me-4 position-relative" id="cartButton">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                            <span class="cart-count">3</span>
+                        </div>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle fa-lg"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" data-section="profile">Profile</a></li>
+                                <li><a class="dropdown-item" href="#" data-section="orders">Order History</a></li>
+                                <li><a class="dropdown-item" href="#" data-section="addresses">Saved Addresses</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#authModal">Login/Signup</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        <!-- Home Section -->
+        <section id="home" class="dashboard-section active">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container text-center">
+                    <h1 class="display-4 fw-bold mb-4 slide-in">Delicious food delivered to your door</h1>
+                    <p class="lead mb-4 slide-in" style="animation-delay: 0.2s;">Order from your favorite restaurants with just a few clicks</p>
+                    <button class="btn btn-primary btn-lg pulse" style="animation-delay: 0.4s;" data-section="menu">Order Now <i class="fas fa-arrow-right ms-2"></i></button>
+                </div>
+            </div>
+
+            <div class="container mb-5">
+                <!-- Category Navigation -->
+                <div class="category-nav">
+                    <div class="row g-3">
+                        <div class="col category-item active" data-category="all">
+                            <i class="fas fa-utensils"></i>
+                            <div>All</div>
+                        </div>
+                        <div class="col category-item" data-category="pizza">
+                            <i class="fas fa-pizza-slice"></i>
+                            <div>Pizza</div>
+                        </div>
+                        <div class="col category-item" data-category="burger">
+                            <i class="fas fa-hamburger"></i>
+                            <div>Burgers</div>
+                        </div>
+                        <div class="col category-item" data-category="dessert">
+                            <i class="fas fa-ice-cream"></i>
+                            <div>Desserts</div>
+                        </div>
+                        <div class="col category-item" data-category="drink">
+                            <i class="fas fa-mug-hot"></i>
+                            <div>Drinks</div>
+                        </div>
+                        <div class="col category-item" data-category="chicken">
+                            <i class="fas fa-drumstick-bite"></i>
+                            <div>Chicken</div>
+                        </div>
+                        <div class="col category-item" data-category="pasta">
+                            <i class="fas fa-utensils"></i>
+                            <div>Pasta</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Special Offers -->
+                <h2 class="section-title">Special Offers</h2>
+                <div class="row mb-5">
+                    <div class="col-md-6 mb-4">
+                        <div class="offer-card card">
+                            <div class="card-body">
+                                <span class="badge bg-light text-dark mb-2">Limited Time</span>
+                                <h3 class="card-title">Family Feast Deal</h3>
+                                <p class="card-text">Get 2 large pizzas, 1 side, and 4 drinks for only $29.99</p>
+                                <button class="btn btn-light">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="offer-card card" style="background: linear-gradient(135deg, #2b2d42, #4a4e69);">
+                            <div class="card-body">
+                                <span class="badge bg-primary mb-2">New</span>
+                                <h3 class="card-title">Free Delivery</h3>
+                                <p class="card-text">Enjoy free delivery on all orders over $15 this weekend</p>
+                                <button class="btn btn-primary">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu Items -->
+                <h2 class="section-title">Our Menu</h2>
+                <div class="row" id="menuItems">
+                    <!-- Product 1 -->
+                    <div class="col-md-4 mb-4 menu-item" data-category="pizza">
+                        <div class="card product-card slide-in">
+                            <div class="product-img position-relative">
+                                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Pizza">
+                                <div class="offer-badge">15% OFF</div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Margherita Pizza</h3>
+                                <p class="product-price">$12.99 <span class="text-decoration-line-through text-muted ms-2">$15.99</span></p>
+                                <p class="product-description">Classic pizza with tomato sauce, mozzarella, and fresh basil</p>
+                                <button class="btn btn-primary w-100 add-to-cart" data-id="1" data-name="Margherita Pizza" data-price="12.99" data-image="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 2 -->
+                    <div class="col-md-4 mb-4 menu-item" data-category="burger">
+                        <div class="card product-card slide-in" style="animation-delay: 0.1s;">
+                            <div class="product-img">
+                                <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Burger">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Classic Burger</h3>
+                                <p class="product-price">$8.99</p>
+                                <p class="product-description">Juicy beef patty with lettuce, tomato, and our special sauce</p>
+                                <button class="btn btn-primary w-100 add-to-cart" data-id="2" data-name="Classic Burger" data-price="8.99" data-image="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 3 -->
+                    <div class="col-md-4 mb-4 menu-item" data-category="pasta">
+                        <div class="card product-card slide-in" style="animation-delay: 0.2s;">
+                            <div class="product-img">
+                                <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Pasta">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Creamy Pasta</h3>
+                                <p class="product-price">$10.99</p>
+                                <p class="product-description">Pasta in a rich creamy sauce with mushrooms and parmesan</p>
+                                <button class="btn btn-primary w-100 add-to-cart" data-id="3" data-name="Creamy Pasta" data-price="10.99" data-image="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 4 -->
+                    <div class="col-md-4 mb-4 menu-item" data-category="salad">
+                        <div class="card product-card slide-in" style="animation-delay: 0.3s;">
+                            <div class="product-img position-relative">
+                                <img src="https://images.unsplash.com/photo-1512168168570-0c5e43e93728?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Salad">
+                                <div class="offer-badge">10% OFF</div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Caesar Salad</h3>
+                                <p class="product-price">$7.99 <span class="text-decoration-line-through text-muted ms-2">$8.99</span></p>
+                                <p class="product-description">Fresh romaine lettuce with croutons, parmesan and caesar dressing</p>
+                                <button class="btn btn-primary w-100 add-to-cart" data-id="4" data-name="Caesar Salad" data-price="7.99" data-image="https://images.unsplash.com/photo-1512168168570-0c5e43e93728?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 5 -->
+                    <div class="col-md-4 mb-4 menu-item" data-category="chicken">
+                        <div class="card product-card slide-in" style="animation-delay: 0.4s;">
+                            <div class="product-img">
+                                <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Chicken">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Grilled Chicken</h3>
+                                <p class="product-price">$11.99</p>
+                                <p class="product-description">Tender grilled chicken breast with herbs and spices</p>
+                                <button class="btn btn-primary w-100 add-to-cart" data-id="5" data-name="Grilled Chicken" data-price="11.99" data-image="https://images.unsplash.com/photo-1572490122747-3968b75cc699?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 6 -->
+                    <div class="col-md-4 mb-4 menu-item" data-category="dessert">
+                        <div class="card product-card slide-in" style="animation-delay: 0.5s;">
+                            <div class="product-img">
+                                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cake">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Chocolate Cake</h3>
+                                <p class="product-price">$6.99</p>
+                                <p class="product-description">Rich chocolate cake with layers of chocolate ganache</p>
+                                <button class="btn btn-primary w-100 add-to-cart" data-id="6" data-name="Chocolate Cake" data-price="6.99" data-image="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order History -->
+                <h2 class="section-title mt-5">Your Order History</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card order-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Order #1234</h5>
+                                    <span class="status-badge status-completed">Completed</span>
+                                </div>
+                                <p class="card-text">2 x Margherita Pizza, 1 x Chocolate Cake</p>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">July 15, 2023</span>
+                                    <strong>$32.97</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card order-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Order #1235</h5>
+                                    <span class="status-badge status-delivering">Delivering</span>
+                                </div>
+                                <p class="card-text">1 x Classic Burger, 1 x Grilled Chicken</p>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">July 14, 2023</span>
+                                    <strong>$20.98</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Section -->
+        <section id="checkout" class="dashboard-section">
+            <div class="container my-5">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="checkout-form mb-4">
+                            <h3 class="mb-4">Delivery Information</h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" value="John">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" value="Doe">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" value="john@example.com">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" value="(123) 456-7890">
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Delivery Address</label>
+                                <textarea class="form-control" id="address" rows="3">123 Main Street, Apt 4B, New York, NY 10001</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="instructions" class="form-label">Delivery Instructions (Optional)</label>
+                                <textarea class="form-control" id="instructions" rows="2" placeholder="e.g., Leave at door, ring bell, etc."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="checkout-form">
+                            <h3 class="mb-4">Payment Method</h3>
+                            <div class="payment-method selected" data-method="card">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCard" checked>
+                                    <label class="form-check-label fw-bold" for="paymentCard">
+                                        Credit/Debit Card
+                                    </label>
+                                </div>
+                                <div class="mt-3" id="cardDetails">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label for="cardNumber" class="form-label">Card Number</label>
+                                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="expiryDate" class="form-label">Expiry Date</label>
+                                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="cvv" class="form-label">CVV</label>
+                                            <input type="text" class="form-control" id="cvv" placeholder="123">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label for="cardName" class="form-label">Name on Card</label>
+                                            <input type="text" class="form-control" id="cardName" placeholder="John Doe">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="payment-method" data-method="paypal">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentPaypal">
+                                    <label class="form-check-label fw-bold" for="paymentPaypal">
+                                        PayPal
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="payment-method" data-method="cash">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCash">
+                                    <label class="form-check-label fw-bold" for="paymentCash">
+                                        Cash on Delivery
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="checkout-form">
+                            <h3 class="mb-4">Order Summary</h3>
+                            <div class="order-summary-item">
+                                <span>Margherita Pizza x 2</span>
+                                <span>$25.98</span>
+                            </div>
+                            <div class="order-summary-item">
+                                <span>Chocolate Cake x 1</span>
+                                <span>$6.99</span>
+                            </div>
+                            <div class="order-summary-item">
+                                <span>Subtotal</span>
+                                <span>$32.97</span>
+                            </div>
+                            <div class="order-summary-item">
+                                <span>Delivery Fee</span>
+                                <span>$2.99</span>
+                            </div>
+                            <div class="order-summary-item">
+                                <span>Tax</span>
+                                <span>$2.63</span>
+                            </div>
+                            <div class="order-total">
+                                <span>Total</span>
+                                <span>$38.59</span>
+                            </div>
+                            <button class="btn btn-primary w-100 btn-lg mt-4" id="placeOrderBtn">Place Order</button>
+                            <button class="btn btn-outline-primary w-100 mt-2" data-section="home">Continue Shopping</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Confirmation Section -->
+        <section id="order-confirmation" class="dashboard-section">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center">
+                        <div class="checkout-form">
+                            <div class="mb-4">
+                                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                            </div>
+                            <h2 class="mb-3">Order Confirmed!</h2>
+                            <p class="lead mb-4">Thank you for your order. Your food is being prepared and will be delivered soon.</p>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h4 class="card-title">Order #5678</h4>
+                                    <p class="card-text">Estimated delivery time: <strong>30-45 minutes</strong></p>
+                                    <p class="card-text">You will receive a confirmation email shortly.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center gap-3">
+                                <button class="btn btn-primary" data-section="orders">View Order Status</button>
+                                <button class="btn btn-outline-primary" data-section="home">Continue Shopping</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Your Cart</h4>
+                <button class="btn-close" id="closeCart"></button>
+            </div>
+            
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be added here dynamically -->
+                <div class="cart-item">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <div class="cart-item-img me-3">
+                                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Pizza">
+                            </div>
+                            <div>
+                                <h6>Margherita Pizza</h6>
+                                <p class="text-muted mb-0">$12.99</p>
+                            </div>
+                        </div>
+                        <div class="quantity-control">
+                            <span class="quantity-btn">-</span>
+                            <input type="text" class="quantity-input" value="1">
+                            <span class="quantity-btn">+</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cart-item">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <div class="cart-item-img me-3">
+                                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cake">
+                            </div>
+                            <div>
+                                <h6>Chocolate Cake</h6>
+                                <p class="text-muted mb-0">$6.99</p>
+                            </div>
+                        </div>
+                        <div class="quantity-control">
+                            <span class="quantity-btn">-</span>
+                            <input type="text" class="quantity-input" value="1">
+                            <span class="quantity-btn">+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <span>$19.98</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Delivery Fee</span>
+                    <span>$2.99</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Tax</span>
+                    <span>$1.40</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-4">
+                    <strong>Total</strong>
+                    <strong>$24.37</strong>
+                </div>
+                
+                <button class="btn btn-primary w-100 btn-lg" id="checkoutButton">Proceed to Checkout</button>
+                <button class="btn btn-outline-primary w-100 mt-2" id="continueShopping">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Sidebar -->
+    <div class="notification-sidebar" id="notificationSidebar">
+        <div class="p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Notifications</h4>
+                <button class="btn-close" id="closeNotifications"></button>
+            </div>
+            
+            <div class="notification-list">
+                <div class="notification-item unread">
+                    <div class="d-flex justify-content-between">
+                        <h6>Order #1235 is on the way!</h6>
+                        <span class="notification-time">10 min ago</span>
+                    </div>
+                    <p class="mb-0">Your driver Mike is arriving in approximately 15 minutes.</p>
+                </div>
+                
+                <div class="notification-item">
+                    <div class="d-flex justify-content-between">
+                        <h6>Special Offer This Weekend</h6>
+                        <span class="notification-time">2 hours ago</span>
+                    </div>
+                    <p class="mb-0">Get 20% off on all orders above $25. Use code WEEKEND20.</p>
+                </div>
+                
+                <div class="notification-item">
+                    <div class="d-flex justify-content-between">
+                        <h6>Order #1234 Delivered</h6>
+                        <span class="notification-time">Yesterday</span>
+                    </div>
+                    <p class="mb-0">Your order has been successfully delivered. Enjoy your meal!</p>
+                </div>
+                
+                <div class="notification-item">
+                    <div class="d-flex justify-content-between">
+                        <h6>New Menu Items Available</h6>
+                        <span class="notification-time">2 days ago</span>
+                    </div>
+                    <p class="mb-0">We've added 5 new dishes to our menu. Check them out!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Welcome to TastyBites</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="auth-tabs">
+                        <div class="auth-tab active" data-tab="login">Login</div>
+                        <div class="auth-tab" data-tab="signup">Sign Up</div>
+                    </div>
+                    
+                    <div class="auth-form" id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <button class="btn btn-primary w-100">Login</button>
+                        <div class="text-center mt-3">
+                            <a href="#" class="text-muted">Forgot password?</a>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-form" id="signupForm" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="signupFirstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="signupFirstName" placeholder="First name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="signupLastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="signupLastName" placeholder="Last name">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="signupPhone" placeholder="Enter your phone number">
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="signupPassword" placeholder="Create a password">
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm your password">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="termsAgree">
+                            <label class="form-check-label" for="termsAgree">I agree to the <a href="#">Terms & Conditions</a></label>
+                        </div>
+                        <button class="btn btn-primary w-100">Create Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Cart Button -->
+    <div class="floating-cart-btn" id="floatingCartBtn">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="floating-cart-count">2</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Current user state
+            let currentUser = null;
+            let cartItems = [
+                { id: 1, name: "Margherita Pizza", price: 12.99, quantity: 1, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+                { id: 6, name: "Chocolate Cake", price: 6.99, quantity: 1, image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" }
+            ];
+            
+            // DOM Elements
+            const mainContent = document.getElementById('mainContent');
+            const dashboardSections = document.querySelectorAll('.dashboard-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const cartButton = document.getElementById('cartButton');
+            const floatingCartBtn = document.getElementById('floatingCartBtn');
+            const cartOverlay = document.getElementById('cartOverlay');
+            const cartSidebar = document.getElementById('cartSidebar');
+            const closeCart = document.getElementById('closeCart');
+            const notificationButton = document.getElementById('notificationButton');
+            const notificationSidebar = document.getElementById('notificationSidebar');
+            const closeNotifications = document.getElementById('closeNotifications');
+            const authTabs = document.querySelectorAll('.auth-tab');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const checkoutButton = document.getElementById('checkoutButton');
+            const continueShopping = document.getElementById('continueShopping');
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+            const categoryItems = document.querySelectorAll('.category-item');
+            const menuItems = document.querySelectorAll('.menu-item');
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            const cartCount = document.querySelector('.cart-count');
+            const floatingCartCount = document.querySelector('.floating-cart-count');
+            const notificationCount = document.querySelector('.notification-count');
+            
+            // Navigation functionality
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    showSection(section);
+                    
+                    // Update active nav link
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Show specific section
+            function showSection(sectionId) {
+                dashboardSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+            
+            // Cart functionality
+            function openCart() {
+                cartSidebar.classList.add('open');
+                cartOverlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeCartSidebar() {
+                cartSidebar.classList.remove('open');
+                cartOverlay.classList.remove('open');
+                document.body.style.overflow = 'auto';
+            }
+            
+            cartButton.addEventListener('click', openCart);
+            floatingCartBtn.addEventListener('click', openCart);
+            closeCart.addEventListener('click', closeCartSidebar);
+            cartOverlay.addEventListener('click', closeCartSidebar);
+            
+            // Notification functionality
+            function openNotifications() {
+                notificationSidebar.classList.add('open');
+                cartOverlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeNotificationSidebar() {
+                notificationSidebar.classList.remove('open');
+                cartOverlay.classList.remove('open');
+                document.body.style.overflow = 'auto';
+            }
+            
+            notificationButton.addEventListener('click', openNotifications);
+            closeNotifications.addEventListener('click', closeNotificationSidebar);
+            cartOverlay.addEventListener('click', closeNotificationSidebar);
+            
+            // Auth tabs functionality
+            authTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    authTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    if (tabName === 'login') {
+                        loginForm.style.display = 'block';
+                        signupForm.style.display = 'none';
+                    } else {
+                        loginForm.style.display = 'none';
+                        signupForm.style.display = 'block';
+                    }
+                });
+            });
+            
+            // Checkout functionality
+            checkoutButton.addEventListener('click', function() {
+                closeCartSidebar();
+                showSection('checkout');
+            });
+            
+            continueShopping.addEventListener('click', function() {
+                closeCartSidebar();
+                showSection('home');
+            });
+            
+            placeOrderBtn.addEventListener('click', function() {
+                showSection('order-confirmation');
+            });
+            
+            // Category filtering
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    categoryItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    menuItems.forEach(menuItem => {
+                        if (category === 'all' || menuItem.getAttribute('data-category') === category) {
+                            menuItem.style.display = 'block';
+                        } else {
+                            menuItem.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Add to cart functionality
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    const image = this.getAttribute('data-image');
+                    
+                    // Animation effect
+                    this.classList.add('pulse');
+                    setTimeout(() => {
+                        this.classList.remove('pulse');
+                    }, 500);
+                    
+                    // Check if item already in cart
+                    const existingItem = cartItems.find(item => item.id == id);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cartItems.push({
+                            id: id,
+                            name: name,
+                            price: price,
+                            quantity: 1,
+                            image: image
+                        });
+                    }
+                    
+                    // Update cart count
+                    updateCartCount();
+                    
+                    // Show notification
+                    showNotification(`${name} added to cart!`);
+                });
+            });
+            
+            // Update cart count
+            function updateCartCount() {
+                const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+                cartCount.textContent = totalItems;
+                floatingCartCount.textContent = totalItems;
+            }
+            
+            // Show notification
+            function showNotification(message) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = 'alert alert-success position-fixed';
+                notification.style.top = '100px';
+                notification.style.right = '20px';
+                notification.style.zIndex = '1060';
+                notification.style.minWidth = '300px';
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                notification.style.transition = 'all 0.3s ease';
+                notification.textContent = message;
+                
+                // Add to document
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateX(0)';
+                }, 10);
+                
+                // Remove after delay
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100px)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+            
+            // Payment method selection
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    const methodId = this.getAttribute('data-method');
+                    
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    document.querySelector(`#payment${methodId.charAt(0).toUpperCase() + methodId.slice(1)}`).checked = true;
+                });
+            });
+            
+            // Initialize
+            updateCartCount();
+            
+            // Animation for elements on scroll
+            const animatedElements = document.querySelectorAll('.slide-in');
+            
+            function checkScroll() {
+                animatedElements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = 1;
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            }
+            
+            // Initial check
+            checkScroll();
+            
+            // Check on scroll
+            window.addEventListener('scroll', checkScroll);
+        });
+    </script>
+</body>
+</html>

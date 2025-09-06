@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBites - Food Delivery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --secondary: #2f4858;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .price {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #e55a2b;
+            border-color: #e55a2b;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-links h5 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .page-section {
+            display: none;
+            padding: 40px 0;
+        }
+        
+        .page-section.active {
+            display: block;
+        }
+        
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: white;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .complaint-status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+        
+        .status-pending {
+            border-left: 4px solid #ffc107;
+        }
+        
+        .status-resolved {
+            border-left: 4px solid var(--success);
+        }
+        
+        .status-inprogress {
+            border-left: 4px solid #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" data-page="home">TastyBites</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-page="home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="menu">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="contact">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <a href="#" class="nav-link me-3" data-page="order-history">
+                        <i class="fas fa-history"></i> Orders
+                    </a>
+                    <a href="#" class="nav-link me-3" data-page="complaint">
+                        <i class="fas fa-exclamation-circle"></i> Support
+                    </a>
+                    <div class="position-relative me-3">
+                        <a href="#" class="nav-link" data-page="cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-badge" id="cartCount">0</span>
+                        </a>
+                    </div>
+                    <a href="#" class="btn btn-outline-primary" data-page="login">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Home Page -->
+    <section id="home" class="page-section active">
+        <div class="hero-section text-center">
+            <div class="container">
+                <h1 class="display-4 fw-bold">Delicious food at your doorstep</h1>
+                <p class="lead">Order from your favorite restaurants with just a few clicks.</p>
+                <a href="#" class="btn btn-primary btn-lg mt-3" data-page="menu">Order Now</a>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2 class="section-title">Popular Categories</h2>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="card text-center">
+                        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Fast Food">
+                        <div class="card-body">
+                            <h5 class="card-title">Fast Food</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Explore</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card text-center">
+                        <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Italian">
+                        <div class="card-body">
+                            <h5 class="card-title">Italian</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Explore</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card text-center">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Healthy">
+                        <div class="card-body">
+                            <h5 class="card-title">Healthy</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Explore</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card text-center">
+                        <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Desserts">
+                        <div class="card-body">
+                            <h5 class="card-title">Desserts</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Featured Items</h2>
+            <div class="row" id="featuredItems">
+                <!-- Items will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Page -->
+    <section id="menu" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Our Menu</h2>
+            
+            <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for dishes..." id="searchInput">
+                        <button class="btn btn-primary" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap gap-2" id="categoryFilters">
+                        <!-- Categories will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" id="menuItems">
+                <!-- Menu items will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Page -->
+    <section id="about" class="page-section">
+        <div class="container">
+            <h2 class="section-title">About Us</h2>
+            
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <h3>Our Story</h3>
+                    <p>Founded in 2020, TastyBites started as a small local food delivery service with a mission to connect hungry customers with the best local restaurants. Today, we serve thousands of customers across the city, delivering delicious meals right to their doorsteps.</p>
+                    <p>Our team of dedicated riders ensures that your food arrives hot and fresh, exactly when you want it. We carefully vet all our restaurant partners to maintain the highest quality standards.</p>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="img-fluid rounded" alt="Our Restaurant">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="text-center">
+                        <div class="display-4 fw-bold text-primary">500+</div>
+                        <p>Restaurant Partners</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="text-center">
+                        <div class="display-4 fw-bold text-primary">10k+</div>
+                        <p>Happy Customers</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="text-center">
+                        <div class="display-4 fw-bold text-primary">45k+</div>
+                        <p>Deliveries Completed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Page -->
+    <section id="contact" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <form id="contactForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Get in Touch</h5>
+                            <p class="card-text">We'd love to hear from you. Here's how you can reach us:</p>
+                            
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                                    123 Food Street, Culinary City
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-phone me-2 text-primary"></i>
+                                    +1 (555) 123-4567
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-envelope me-2 text-primary"></i>
+                                    support@tastybites.com
+                                </li>
+                            </ul>
+                            
+                            <div class="mt-4">
+                                <h6>Business Hours</h6>
+                                <p>Monday - Friday: 9am - 10pm<br>Saturday - Sunday: 10am - 11pm</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Page -->
+    <section id="cart" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Your Cart</h2>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="cartItems">
+                                <!-- Cart items will be loaded dynamically -->
+                                <div class="text-center py-4" id="emptyCart">
+                                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                    <h5>Your cart is empty</h5>
+                                    <p>Browse our menu and add some delicious items</p>
+                                    <a href="#" class="btn btn-primary" data-page="menu">Explore Menu</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Order Summary</h5>
+                            
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal</span>
+                                <span id="cartSubtotal">$0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Delivery Fee</span>
+                                <span id="deliveryFee">$2.99</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tax</span>
+                                <span id="taxAmount">$0.00</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Total</strong>
+                                <strong id="cartTotal">$0.00</strong>
+                            </div>
+                            
+                            <button class="btn btn-primary w-100" id="checkoutBtn" disabled>Proceed to Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Page -->
+    <section id="checkout" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Checkout</h2>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Delivery Address</h5>
+                            
+                            <form id="addressForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="street" class="form-label">Street Address</label>
+                                    <input type="text" class="form-control" id="street" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="city" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="zipCode" class="form-label">ZIP Code</label>
+                                        <input type="text" class="form-control" id="zipCode" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Payment Method</h5>
+                            
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" checked>
+                                <label class="form-check-label" for="creditCard">
+                                    Credit/Debit Card
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paypal">
+                                <label class="form-check-label" for="paypal">
+                                    PayPal
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cash">
+                                <label class="form-check-label" for="cash">
+                                    Cash on Delivery
+                                </label>
+                            </div>
+                            
+                            <div class="mt-4" id="creditCardForm">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="cardNumber" class="form-label">Card Number</label>
+                                        <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="expiry" class="form-label">Expiry Date</label>
+                                        <input type="text" class="form-control" id="expiry" placeholder="MM/YY">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="cvv" class="form-label">CVV</label>
+                                        <input type="text" class="form-control" id="cvv" placeholder="123">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card sticky-top" style="top: 90px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Order Summary</h5>
+                            
+                            <div id="checkoutItems">
+                                <!-- Checkout items will be loaded dynamically -->
+                            </div>
+                            
+                            <hr>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal</span>
+                                <span id="checkoutSubtotal">$0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Delivery Fee</span>
+                                <span>$2.99</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tax</span>
+                                <span id="checkoutTax">$0.00</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Total</strong>
+                                <strong id="checkoutTotal">$0.00</strong>
+                            </div>
+                            
+                            <button class="btn btn-primary w-100" id="placeOrderBtn">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order History Page -->
+    <section id="order-history" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Order History</h2>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderHistoryTable">
+                                <!-- Orders will be loaded dynamically -->
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">No orders found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Complaint Page -->
+    <section id="complaint" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Customer Support</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Submit a Complaint</h5>
+                            
+                            <form id="complaintForm">
+                                <div class="mb-3">
+                                    <label for="complaintType" class="form-label">Complaint Type</label>
+                                    <select class="form-select" id="complaintType" required>
+                                        <option value="">Select type</option>
+                                        <option value="food_quality">Food Quality</option>
+                                        <option value="delivery_issue">Delivery Issue</option>
+                                        <option value="missing_item">Missing Item</option>
+                                        <option value="payment_issue">Payment Issue</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="complaintSubject" class="form-label">Subject</label>
+                                    <input type="text" class="form-control" id="complaintSubject" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="complaintDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="complaintDescription" rows="5" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="orderReference" class="form-label">Order Reference (if applicable)</label>
+                                    <input type="text" class="form-control" id="orderReference">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Complaint Status</h5>
+                            
+                            <div id="complaintStatus">
+                                <!-- Complaint status will be loaded dynamically -->
+                                <div class="text-center py-4">
+                                    <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+                                    <h5>No complaints submitted</h5>
+                                    <p>Submit a complaint above to track its status here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Page -->
+    <section id="login" class="page-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title text-center mb-4">Login</h3>
+                            
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </form>
+                            
+                            <div class="text-center mt-3">
+                                <a href="#" data-page="signup">Don't have an account? Sign up</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signup Page -->
+    <section id="signup" class="page-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title text-center mb-4">Create Account</h3>
+                            
+                            <form id="signupForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="signupFirstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="signupFirstName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="signupLastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="signupLastName" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signupEmail" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="signupEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signupPhone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="signupPhone" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signupPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="signupPassword" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="signupConfirmPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                            </form>
+                            
+                            <div class="text-center mt-3">
+                                <a href="#" data-page="login">Already have an account? Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>TastyBites</h5>
+                    <p>Delivering delicious food to your doorstep. Order from your favorite restaurants with ease.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="#" data-page="home">Home</a></li>
+                        <li><a href="#" data-page="menu">Menu</a></li>
+                        <li><a href="#" data-page="about">About Us</a></li>
+                        <li><a href="#" data-page="contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Support</h5>
+                    <ul>
+                        <li><a href="#" data-page="complaint">Help Center</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Newsletter</h5>
+                    <p>Subscribe to our newsletter for updates and special offers.</p>
+                    <form class="d-flex">
+                        <input type="email" class="form-control me-2" placeholder="Your email">
+                        <button class="btn btn-primary" type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2023 TastyBites. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample data for demonstration
+        const categories = [
+            { ID: '1', Category: 'Fast Food' },
+            { ID: '2', Category: 'Italian' },
+            { ID: '3', Category: 'Chinese' },
+            { ID: '4', Category: 'Desserts' },
+            { ID: '5', Category: 'Healthy' }
+        ];
+
+        const menuItems = [
+            { 
+                Id: '1', 
+                Name: 'Cheeseburger Deluxe', 
+                Description: 'Juicy beef patty with cheese, lettuce, tomato, and special sauce', 
+                Price: 8.99, 
+                Discount: null, 
+                ItemCategoryId: '1',
+                images: ['https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+            },
+            { 
+                Id: '2', 
+                Name: 'Margherita Pizza', 
+                Description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil', 
+                Price: 12.99, 
+                Discount: 1.50, 
+                ItemCategoryId: '2',
+                images: ['https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+            },
+            { 
+                Id: '3', 
+                Name: 'Chicken Stir Fry', 
+                Description: 'Tender chicken with mixed vegetables in a savory sauce', 
+                Price: 10.99, 
+                Discount: null, 
+                ItemCategoryId: '3',
+                images: ['https://images.unsplash.com/photo-1604322824011-8375a55d7d12?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+            },
+            { 
+                Id: '4', 
+                Name: 'Chocolate Brownie', 
+                Description: 'Rich chocolate brownie with walnuts, served with ice cream', 
+                Price: 5.99, 
+                Discount: 0.50, 
+                ItemCategoryId: '4',
+                images: ['https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+            },
+            { 
+                Id: '5', 
+                Name: 'Avocado Salad', 
+                Description: 'Fresh greens with avocado, cherry tomatoes, and light dressing', 
+                Price: 7.99, 
+                Discount: null, 
+                ItemCategoryId: '5',
+                images: ['https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+            },
+            { 
+                Id: '6', 
+                Name: 'BBQ Bacon Burger', 
+                Description: 'Beef patty with bacon, cheddar, onion rings, and BBQ sauce', 
+                Price: 9.99, 
+                Discount: 1.00, 
+                ItemCategoryId: '1',
+                images: ['https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80']
+            }
+        ];
+
+        // State management
+        let cart = [];
+        let currentPage = 'home';
+        
+        // DOM elements
+        const pageSections = document.querySelectorAll('.page-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const cartCount = document.getElementById('cartCount');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+
+        // Initialize the application
+        function init() {
+            // Load featured items on home page
+            renderFeaturedItems();
+            
+            // Load categories for menu page
+            renderCategories();
+            
+            // Load menu items
+            renderMenuItems();
+            
+            // Set up event listeners
+            setupEventListeners();
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    navigateTo(page);
+                });
+            });
+            
+            // Footer links
+            const footerLinks = document.querySelectorAll('footer a');
+            footerLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    if (page) {
+                        navigateTo(page);
+                    }
+                });
+            });
+            
+            // Forms
+            document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
+            document.getElementById('signupForm')?.addEventListener('submit', handleSignup);
+            document.getElementById('contactForm')?.addEventListener('submit', handleContact);
+            document.getElementById('complaintForm')?.addEventListener('submit', handleComplaint);
+            document.getElementById('checkoutBtn')?.addEventListener('click', () => navigateTo('checkout'));
+            document.getElementById('placeOrderBtn')?.addEventListener('click', handlePlaceOrder);
+            
+            // Search functionality
+            document.getElementById('searchInput')?.addEventListener('input', handleSearch);
+        }
+
+        // Navigate to a specific page
+        function navigateTo(page) {
+            // Hide all pages
+            pageSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show the requested page
+            document.getElementById(page).classList.add('active');
+            currentPage = page;
+            
+            // Update active nav link
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === page) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Page-specific initialization
+            if (page === 'cart') {
+                renderCart();
+            } else if (page === 'checkout') {
+                renderCheckout();
+            } else if (page === 'order-history') {
+                renderOrderHistory();
+            } else if (page === 'complaint') {
+                renderComplaintStatus();
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Show notification
+        function showNotification(message, isSuccess = true) {
+            notificationText.textContent = message;
+            notification.style.borderLeftColor = isSuccess ? '#28a745' : '#dc3545';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Render featured items on home page
+        function renderFeaturedItems() {
+            const featuredContainer = document.getElementById('featuredItems');
+            if (!featuredContainer) return;
+            
+            // Get 4 random items
+            const featured = [...menuItems].sort(() => 0.5 - Math.random()).slice(0, 4);
+            
+            featuredContainer.innerHTML = featured.map(item => `
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <img src="${item.images[0]}" class="card-img-top" alt="${item.Name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.Name}</h5>
+                            <p class="card-text">${item.Description}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price">$${(item.Price - (item.Discount || 0)).toFixed(2)}</span>
+                                <button class="btn btn-sm btn-primary add-to-cart" data-id="${item.Id}">
+                                    <i class="fas fa-plus"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add event listeners to add-to-cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = e.target.closest('.add-to-cart').getAttribute('data-id');
+                    addToCart(itemId);
+                });
+            });
+        }
+
+        // Render categories for menu page
+        function renderCategories() {
+            const categoriesContainer = document.getElementById('categoryFilters');
+            if (!categoriesContainer) return;
+            
+            categoriesContainer.innerHTML = `
+                <button class="btn btn-outline-primary active" data-category="all">All</button>
+                ${categories.map(cat => `
+                    <button class="btn btn-outline-primary" data-category="${cat.ID}">${cat.Category}</button>
+                `).join('')}
+            `;
+            
+            // Add event listeners to category buttons
+            document.querySelectorAll('#categoryFilters button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('#categoryFilters button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    e.target.classList.add('active');
+                    
+                    // Filter menu items
+                    const category = e.target.getAttribute('data-category');
+                    filterMenuItems(category);
+                });
+            });
+        }
+
+        // Render menu items
+        function renderMenuItems() {
+            const menuContainer = document.getElementById('menuItems');
+            if (!menuContainer) return;
+            
+            menuContainer.innerHTML = menuItems.map(item => {
+                const category = categories.find(cat => cat.ID === item.ItemCategoryId)?.Category || 'Uncategorized';
+                const finalPrice = item.Price - (item.Discount || 0);
+                
+                return `
+                    <div class="col-md-4 mb-4 menu-item" data-category="${item.ItemCategoryId}">
+                        <div class="card">
+                            <img src="${item.images[0]}" class="card-img-top" alt="${item.Name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.Name}</h5>
+                                <p class="card-text">${item.Description}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="price">$${finalPrice.toFixed(2)}</span>
+                                        ${item.Discount ? `<span class="text-muted text-decoration-line-through ms-2">$${item.Price.toFixed(2)}</span>` : ''}
+                                    </div>
+                                    <button class="btn btn-sm btn-primary add-to-cart" data-id="${item.Id}">
+                                        <i class="fas fa-plus"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Add event listeners to add-to-cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = e.target.closest('.add-to-cart').getAttribute('data-id');
+                    addToCart(itemId);
+                });
+            });
+        }
+
+        // Filter menu items by category
+        function filterMenuItems(category) {
+            const allItems = document.querySelectorAll('.menu-item');
+            
+            allItems.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Handle search input
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const allItems = document.querySelectorAll('.menu-item');
+            
+            allItems.forEach(item => {
+                const title = item.querySelector('.card-title').textContent.toLowerCase();
+                const description = item.querySelector('.card-text').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Add item to cart
+        function addToCart(itemId) {
+            const item = menuItems.find(i => i.Id === itemId);
+            if (!item) return;
+            
+            // Check if item is already in cart
+            const existingItem = cart.find(i => i.id === itemId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: item.Id,
+                    name: item.Name,
+                    price: item.Price - (item.Discount || 0),
+                    image: item.images[0],
+                    quantity: 1
+                });
+            }
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Show notification
+            showNotification(`${item.Name} added to cart!`);
+        }
+
+        // Update cart count badge
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = count;
+            
+            // Enable/disable checkout button
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (checkoutBtn) {
+                checkoutBtn.disabled = count === 0;
+            }
+        }
+
+        // Render cart items
+        function renderCart() {
+            const cartContainer = document.getElementById('cartItems');
+            const emptyCart = document.getElementById('emptyCart');
+            const cartSubtotal = document.getElementById('cartSubtotal');
+            const taxAmount = document.getElementById('taxAmount');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                emptyCart.style.display = 'block';
+                cartContainer.innerHTML = '';
+            } else {
+                emptyCart.style.display = 'none';
+                
+                cartContainer.innerHTML = cart.map(item => `
+                    <div class="cart-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="${item.image}" alt="${item.name}" width="60" height="60" class="rounded me-3">
+                            <div>
+                                <h6 class="mb-0">${item.name}</h6>
+                                <p class="mb-0 text-muted">$${item.price.toFixed(2)} each</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group me-3">
+                                <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-id="${item.id}">-</button>
+                                <span class="px-3">${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-secondary increase-quantity" data-id="${item.id}">+</button>
+                            </div>
+                            <span class="fw-bold">$${(item.price * item.quantity).toFixed(2)}</span>
+                            <button class="btn btn-sm btn-link text-danger remove-item ms-3" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners to quantity buttons
+                document.querySelectorAll('.increase-quantity').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const itemId = e.target.closest('.increase-quantity').getAttribute('data-id');
+                        const item = cart.find(i => i.id === itemId);
+                        if (item) {
+                            item.quantity += 1;
+                            renderCart();
+                            updateCartCount();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.decrease-quantity').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const itemId = e.target.closest('.decrease-quantity').getAttribute('data-id');
+                        const item = cart.find(i => i.id === itemId);
+                        if (item) {
+                            item.quantity -= 1;
+                            if (item.quantity === 0) {
+                                cart = cart.filter(i => i.id !== itemId);
+                            }
+                            renderCart();
+                            updateCartCount();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const itemId = e.target.closest('.remove-item').getAttribute('data-id');
+                        cart = cart.filter(i => i.id !== itemId);
+                        renderCart();
+                        updateCartCount();
+                        showNotification('Item removed from cart');
+                    });
+                });
+            }
+            
+            // Calculate totals
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.08; // 8% tax
+            const total = subtotal + tax + 2.99; // $2.99 delivery fee
+            
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            taxAmount.textContent = `$${tax.toFixed(2)}`;
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Render checkout page
+        function renderCheckout() {
+            const checkoutItems = document.getElementById('checkoutItems');
+            const checkoutSubtotal = document.getElementById('checkoutSubtotal');
+            const checkoutTax = document.getElementById('checkoutTax');
+            const checkoutTotal = document.getElementById('checkoutTotal');
+            
+            if (cart.length === 0) {
+                navigateTo('cart');
+                return;
+            }
+            
+            checkoutItems.innerHTML = cart.map(item => `
+                <div class="d-flex justify-content-between mb-2">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('');
+            
+            // Calculate totals
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.08; // 8% tax
+            const total = subtotal + tax + 2.99; // $2.99 delivery fee
+            
+            checkoutSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            checkoutTax.textContent = `$${tax.toFixed(2)}`;
+            checkoutTotal.textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Render order history
+        function renderOrderHistory() {
+            const orderHistoryTable = document.getElementById('orderHistoryTable');
+            // In a real app, this would come from an API
+            orderHistoryTable.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center py-4">No orders found</td>
+                </tr>
+            `;
+        }
+
+        // Render complaint status
+        function renderComplaintStatus() {
+            const complaintStatus = document.getElementById('complaintStatus');
+            // In a real app, this would come from an API
+            complaintStatus.innerHTML = `
+                <div class="text-center py-4">
+                    <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+                    <h5>No complaints submitted</h5>
+                    <p>Submit a complaint above to track its status here</p>
+                </div>
+            `;
+        }
+
+        // Handle login form submission
+        function handleLogin(e) {
+            e.preventDefault();
+            showNotification('Login successful!');
+            navigateTo('home');
+        }
+
+        // Handle signup form submission
+        function handleSignup(e) {
+            e.preventDefault();
+            showNotification('Account created successfully!');
+            navigateTo('login');
+        }
+
+        // Handle contact form submission
+        function handleContact(e) {
+            e.preventDefault();
+            showNotification('Your message has been sent!');
+            document.getElementById('contactForm').reset();
+        }
+
+        // Handle complaint form submission
+        function handleComplaint(e) {
+            e.preventDefault();
+            showNotification('Complaint submitted successfully!');
+            document.getElementById('complaintForm').reset();
+        }
+
+        // Handle place order
+        function handlePlaceOrder() {
+            showNotification('Order placed successfully!');
+            cart = [];
+            updateCartCount();
+            navigateTo('order-history');
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
