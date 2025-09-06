@@ -1,0 +1,53 @@
+ <!-- Settings Section -->
+        <div id="settings" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">System Settings</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="restaurantName" class="form-label">Restaurant Name</label>
+                                <input type="text" class="form-control" id="restaurantName" value="TastyBites">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="phoneNumber" value="(123) 456-7890">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailAddress" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="emailAddress" value="info@tastybites.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" rows="2">123 Main Street, City, Country</textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="deliveryFee" class="form-label">Delivery Fee ($)</label>
+                                <input type="number" class="form-control" id="deliveryFee" value="2.99">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="minOrder" class="form-label">Minimum Order ($)</label>
+                                <input type="number" class="form-control" id="minOrder" value="10.00">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="taxRate" class="form-label">Tax Rate (%)</label>
+                                <input type="number" class="form-control" id="taxRate" value="7.5">
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="onlineOrders" checked>
+                            <label class="form-check-label" for="onlineOrders">Accept Online Orders</label>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="deliveryService" checked>
+                            <label class="form-check-label" for="deliveryService">Enable Delivery Service</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>

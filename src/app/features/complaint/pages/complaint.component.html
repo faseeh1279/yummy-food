@@ -1,0 +1,59 @@
+<!-- Complaints Section -->
+        <div id="complaints" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Complaint Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Complaint Name</th>
+                                    <th>Description</th>
+                                    <th>From</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Late Delivery</td>
+                                    <td>Order was delivered 30 minutes late</td>
+                                    <td>John Doe (Customer)</td>
+                                    <td><span class="badge complaint-open">Open</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editComplaintModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#complaintDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Wrong Order</td>
+                                    <td>Received wrong items in the order</td>
+                                    <td>Jane Smith (Customer)</td>
+                                    <td><span class="badge complaint-inprogress">In Progress</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editComplaintModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#complaintDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Rude Behavior</td>
+                                    <td>Rider was rude during delivery</td>
+                                    <td>Mike Johnson (Rider)</td>
+                                    <td><span class="badge complaint-resolved">Resolved</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editComplaintModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#complaintDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>

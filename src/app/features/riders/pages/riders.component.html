@@ -1,0 +1,70 @@
+<!-- Riders Section -->
+        <div id="riders" class="dashboard-section">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Rider Management</h5>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRiderModal">
+                        <i class="fas fa-plus"></i> Add Rider
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>CNIC</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Orders Delivered</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Mike Johnson</td>
+                                    <td>12345-6789012-3</td>
+                                    <td>(123) 456-7893</td>
+                                    <td>mikeexample.com</td>
+                                    <td>42</td>
+                                    <td><span class="badge bg-success">Available</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRiderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRiderModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Sarah Williams</td>
+                                    <td>12345-6789012-4</td>
+                                    <td>(123) 456-7894</td>
+                                    <td>sarahexample.com</td>
+                                    <td>28</td>
+                                    <td><span class="badge bg-warning">On Delivery</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRiderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRiderModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>David Brown</td>
+                                    <td>12345-6789012-5</td>
+                                    <td>(123) 456-7895</td>
+                                    <td>davidexample.com</td>
+                                    <td>35</td>
+                                    <td><span class="badge bg-danger">Offline</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRiderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRiderModal"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,67 @@
+<!-- Orders Section -->
+        <div id="orders" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Phone</th>
+                                    <th>Created At</th>
+                                    <th>Total Price</th>
+                                    <th>Status</th>
+                                    <th>Rider</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#1234</td>
+                                    <td>John Doe</td>
+                                    <td>(123) 456-7890</td>
+                                    <td>2023-07-15 12:30</td>
+                                    <td>$32.97</td>
+                                    <td><span class="badge status-pending">Pending</span></td>
+                                    <td>Not Assigned</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#orderDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#1235</td>
+                                    <td>Jane Smith</td>
+                                    <td>(123) 456-7891</td>
+                                    <td>2023-07-15 11:45</td>
+                                    <td>$24.50</td>
+                                    <td><span class="badge status-preparing">Preparing</span></td>
+                                    <td>Not Assigned</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#orderDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#1236</td>
+                                    <td>Robert Johnson</td>
+                                    <td>(123) 456-7892</td>
+                                    <td>2023-07-15 10:20</td>
+                                    <td>$18.75</td>
+                                    <td><span class="badge status-delivering">Delivering</span></td>
+                                    <td>Mike Johnson</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#orderDetailsModal"><i class="fas fa-info"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>

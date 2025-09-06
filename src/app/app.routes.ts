@@ -3,19 +3,43 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     { 
         path: "", 
-        redirectTo: "admin",
+        redirectTo: "dashboard/dashboard-page",
         pathMatch: "full" 
     },
-    {
-        path: "auth",
-        loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule), 
-    }, 
-    {
-        path: 'admin',
-        loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule), 
-    }, 
     { 
-        path: 'customer',
-        loadChildren: () => import('./features/customer/customer.module').then(m => m.CustomerModule), 
+        path: "dashboard", 
+        loadChildren: () => import("./features/dashboard/dashboard.module").then(m => m.DashboardModule)
+    },
+    {
+        path: "products", 
+        loadChildren: () => import("./features/products/products.module").then(m => m.ProductsModule)
+    },
+    {
+        path: "categories",
+        loadChildren: () => import("./features/categories/categories.module").then(m => m.CategoriesModule)
+    },
+    {
+        path: "orders",
+        loadChildren: () => import("./features/orders/orders.module").then(m => m.OrdersModule)
+    },
+    {
+        path: "customers", 
+        loadChildren: () => import("./features/customers/customers.module").then(m => m.CustomersModule)
+    },
+    {
+        path: "riders", 
+        loadChildren: () => import("./features/riders/riders.module").then(m => m.RidersModule)
+    },
+    {
+        path: "complaints", 
+        loadChildren: () => import("./features/complaint/complaint.module").then(m => m.ComplaintModule)    
+    },
+    {
+        path: "analytics", 
+        loadChildren: () => import("./features/analytics/analytics.module").then(m => m.AnalyticsModule)        
+    },
+    {
+        path: "settings", 
+        loadChildren: () => import("./features/settings/settings.module").then(m => m.SettingsModule)        
     }
 ];
