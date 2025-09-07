@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet,RouterLinkActive,RouterModule } from '@angular/router';
+import { Router, RouterOutlet, RouterLinkActive, RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLinkActive, RouterModule],
+  standalone: true,
+  imports: [RouterOutlet, RouterLinkActive, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
