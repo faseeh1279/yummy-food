@@ -7,10 +7,14 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-private readonly ACCESS_TOKEN_KEY = 'access_token';
+  private readonly ACCESS_TOKEN_KEY = 'access_token';
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
 
-  constructor(private http: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
+
+  isAuthenticated(): boolean {
+        return !!localStorage.getItem('access_token'); // Check if a token exists
+      }
 
   getAccessToken(): string | null {
     return localStorage.getItem(this.ACCESS_TOKEN_KEY);
@@ -25,10 +29,10 @@ private readonly ACCESS_TOKEN_KEY = 'access_token';
     localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
   }
 
-  refreshToken(refreshToken: string): Observable<any> {
-    // Implement your token refresh API call here
-    return this.http.post(`${environment.authUrl}/Generate-Access-Token`, { refreshToken });
-  }
+  // Generates New Access Token if the Token expires.
+    generateNewAccessToken = (token: string) => {
+        return this.httpClient.post<{access:string}>(this.REFRESH_TOKEN_KEY, {refresh: token}); 
+    }
 
   logout(): void {
     localStorage.removeItem(this.ACCESS_TOKEN_KEY);

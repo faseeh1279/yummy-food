@@ -1,0 +1,15 @@
+<button 
+  [type]="type" 
+  [disabled]="disabled"
+  class="btn"
+  [ngClass]="{
+    'btn-primary': color === 'primary',
+    'btn-secondary': color === 'secondary',
+    'btn-danger': color === 'danger'
+  }"
+  [ngStyle]="customStyle">
+
+  <i *ngIf="icon" class="{{ icon }}"></i>
+  {{ label }}
+  
+</button>

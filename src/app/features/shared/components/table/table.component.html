@@ -1,0 +1,21 @@
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th *ngFor="let col of tableColumns">{{ col.header }}</th>
+      <th *ngIf="actions">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of tableData" [id]="row.rowID">
+      <td *ngFor="let td of row.data">
+        <!-- {{ row.find(r => r.key === col.field)?.value }} -->
+          {{td.value}}
+        </td>
+        <td *ngIf="actions">
+        <ng-container  *ngTemplateOutlet="actionTemplate; context: { $implicit: row }">
+
+        </ng-container>
+      </td>
+    </tr>
+  </tbody>
+</table>

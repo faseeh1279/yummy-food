@@ -1,0 +1,9 @@
+<div class="form-group" [ngStyle]="customStyle">
+    <label [for]="forlabel">{{label}}</label>
+    <select class="form-select" aria-label="Default select example" [formControl]="control">
+        @for (option of options; track $index) {
+            <option [value]="option">{{option}}</option>
+        }
+    </select>
+    <span *ngIf="error" [ngStyle]="{'color': 'red'}">{{error}}</span>
+</div>

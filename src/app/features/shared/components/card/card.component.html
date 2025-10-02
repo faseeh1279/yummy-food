@@ -1,0 +1,20 @@
+<div class="card" [ngStyle]="customStyle">
+    <!-- Image -->
+    <img *ngIf="image" [src]="image" alt="Card image" class="card-img">
+
+    <!-- Card body -->
+    <div class="card-body">
+        <h3 class="card-title">{{ title }}</h3>
+        <p *ngIf="subtitle" class="card-subtitle">{{ subtitle }}</p>
+
+        <!-- Custom content slot -->
+        <div class="card-content">
+            <ng-content></ng-content>
+        </div>
+    </div>
+
+    <!-- Footer slot (e.g., actions) -->
+    <div class="card-footer">
+        <ng-content select="[footer]"></ng-content>
+    </div>
+</div>

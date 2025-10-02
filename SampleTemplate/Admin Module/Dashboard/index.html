@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../Shared/shared.css">
+    <style>
+        
+        #header-card {
+            display: flex;
+            justify-content: space-between;
+            width: 60vw; 
+            margin: auto; 
+            margin-top: 20px; 
+            border: black;
+            box-sizing: border-box;
+            border-radius: 5px;
+            box-shadow: 10px 20px 150px var(--dark);
+            padding: 15px;
+        }
+        #header-card h2{ 
+            font-size: xx-large;
+        }
+
+        #header-card-items {
+            display: flex;
+        }
+
+        #header-card-items img {
+            border-radius: 100%;
+            height: 50px;
+            width: 50px;
+        }
+
+        #dashboard-card{
+            width: 15vw; 
+            margin: auto; 
+            margin-top: 20px; 
+            text-align: center;
+            border: black;
+            box-sizing: border-box;
+            border-radius: 5px;
+            box-shadow: 0px 20px 500px var(--dark);
+            padding: 15px;
+        }
+        #dashboard-card h2{ 
+            margin: 10px; 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <div id="side-bar">
+            <div id="side-bar-logo">
+                <span id="side-bar-logo-first">Tasty</span><span id="side-bar-logo-second">Bytes</span>
+            </div>
+            <div id="side-bar-contents">
+                <ul>
+                    <li class="nav-active"><a href="#">Dashboard</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Orders</a></li>
+                    <li><a href="#">Customers</a></li>
+                    <li><a href="#">Riders</a></li>
+                    <li><a href="#">Complaints</a></li>
+                    <li><a href="#">Analytics</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="content">
+
+            <div id="header-card">
+                <h2>Admin Dashboard</h2>
+                <div id="header-card-items">
+                    <img src="../profile-image.png" alt="error loading Image">
+                    <div>
+                        <p>Admin User</p>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="dashboard-card">
+                <img src="" alt="">
+                <h2>42</h2>
+                <p>Total Products</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

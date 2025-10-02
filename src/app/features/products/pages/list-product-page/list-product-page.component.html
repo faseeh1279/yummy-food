@@ -1,0 +1,17 @@
+<app-table [tableColumns]="tableheaders" [actions]="true" [tableData]="tabledatas">
+  <ng-template let-row>
+    <app-action-button
+      [customStyle]="{'background-color':'green', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px'}"
+      [icon]="'fa-regular fa-eye'" (clicked)="viewProduct($event)" />
+    <app-action-button
+      [customStyle]="{'background-color':'#ff7700', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px'}"
+      [icon]="'fa-solid fa-pen-to-square'" (clicked)="updateProduct($event)" />
+    <app-action-button
+      [customStyle]="{'background-color':'red', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px'}"
+      [icon]="'fa-solid fa-trash'" (clicked)="deleteProduct($event)" />
+  </ng-template>
+
+</app-table>
+
+
+
