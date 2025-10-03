@@ -1,17 +1,23 @@
 <app-table [tableColumns]="tableheaders" [actions]="true" [tableData]="tabledatas">
   <ng-template let-row>
     <app-action-button
-      [customStyle]="{'background-color':'green', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px'}"
-      [icon]="'fa-regular fa-eye'" (clicked)="viewProduct($event)" />
-    <app-action-button
-      [customStyle]="{'background-color':'#ff7700', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px'}"
-      [icon]="'fa-solid fa-pen-to-square'" (clicked)="updateProduct($event)" />
-    <app-action-button
-      [customStyle]="{'background-color':'red', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px'}"
-      [icon]="'fa-solid fa-trash'" (clicked)="deleteProduct($event)" />
+      [customStyle]="{'background-color':'green', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px', 'border':'none'}"
+      [icon]="'fa-regular fa-eye'" (clicked)="viewProduct(row)" class="action-btns"/>
+      <app-action-button
+      [customStyle]="{'background-color':'#ff7700', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px', 'border':'none'}"
+      [icon]="'fa-solid fa-pen-to-square'" (clicked)="updateProduct(row)" class="action-btns"/>
+      <app-action-button
+      [customStyle]="{'background-color':'red', 'color':'white', 'border-color':'white', 'height':'30px','width':'30px', 'border':'none'}"
+      [icon]="'fa-solid fa-trash'" (clicked)="deleteProduct(row)" class="action-btns"/>
   </ng-template>
 
 </app-table>
 
+<!-- Modal -->
+<!-- <app-modal [(state)]="modalState" [title]="modalTitle">
+  <form-update-product modal-body (closeModal)="modalState = false"/>
+</app-modal> -->
 
-
+<app-modal [(state)]="modalState" [title]="modalTitle">
+  <app-product-view-card modal-body [productDetail]="selectedProduct"/>
+</app-modal>

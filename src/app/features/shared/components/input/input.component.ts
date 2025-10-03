@@ -16,4 +16,6 @@ export class InputComponent {
   @Input() error?: string;
   @Input() customStyle?: any;
   @Input() inputClass?: string = 'form-control'; 
+  @Input() readonly: boolean = false; 
+  @Input() value?: any; 
 }

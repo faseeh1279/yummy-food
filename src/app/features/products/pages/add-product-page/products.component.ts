@@ -34,9 +34,6 @@ export class ProductsComponent implements OnInit {
     })
   }
   addProduct = (addProductDTO: AddProductDTO) => {
-    
-    
-    debugger
     this._productService.addProduct(addProductDTO).subscribe({
       next: (response) => {
         Swal.fire({

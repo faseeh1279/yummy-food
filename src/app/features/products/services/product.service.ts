@@ -20,7 +20,9 @@ export class ProductService {
     ) {
 
     }
-
+    deleteProduct(productID: string){ 
+        return this._httpClient.delete(this.DeleteItemURL+productID); 
+    }
     addProduct(payload: AddProductDTO) { 
         return this._httpClient.post(this.AddItemURL, payload); 
     }
@@ -31,77 +33,5 @@ export class ProductService {
     fetchItems(){ 
         return this._httpClient.get(this.GetAllItemsURL); 
     }
-    // addItemImage(ItemId: string, ItemImage: File) {
-    //     let payload = {
-    //         ItemId: ItemId,
-    //         File: ItemImage
-    //     }
-    //     return this._httpClient.post(this.AddItemImageURL, payload);
-    // }
-
-
-    // loadAllItems() {
-    //     return this._httpClient.get<Product[]>(this.GetAllItemsURL).subscribe({
-    //         next: (response) => {
-    //             this.productItems$.next(response);
-    //         }
-    //     })
-    // }
-
-    // addProduct(payload: AddProductDTO) {
-    //     return this._httpClient.post<Product>(this.AddItemURL, payload).subscribe({
-    //         next: (response) => {
-    //             Swal.fire({
-    //                 icon: "success", 
-    //                 title: "Success", 
-    //                 text: `${response.category}`
-    //             })
-    //             const current = this.productItems$.value;
-    //             debugger; 
-    //             this.productItems$.next([...current, response]);
-    //         },
-    //         error: (error) => {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Oops...",
-    //                 text: `${error.error.text}`
-    //             });
-    //         }
-    //     })
-    // }
-
-    // updateProduct(payload: AddProductDTO) {
-    //     return this._httpClient.put<Product>(this.UpdateItemURL, payload);
-    // }
-
-    // deleteProduct(productId: string) {
-    //     return this._httpClient.delete(this.DeleteItemURL + productId).subscribe({
-    //         next: () => {
-    //             const current = this.productItems$.value;
-    //             const updated = current.filter(r => r.id !== productId); 
-    //             this.productItems$.next(updated);
-    //         },
-    //         error: (error) => {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Oops...",
-    //                 text: `${error.error.text}`
-    //             });
-    //         }
-    //     });
-    // }
-
-    // addProductImage(payload: AddProductImage) {
-    //     return this._httpClient.post<ProductImage>(this.AddItemImageURL, payload);
-    // }
-
-
-    // getAllCategories() {
-    //     return this._httpClient.get(this.GetAllCategoriesURL);
-    // }
-
-    // deleteItem(id: string): Observable<void> {
-    //     return this._httpClient.delete<void>(`${this.DeleteItemURL}${id}`);
-    // }
-
+    
 }

@@ -13,11 +13,9 @@ export class ButtonComponent {
   @Input() disabled = false;
   @Input() icon?: string;
   @Output() clicked = new EventEmitter<void>();
-  @Input() customStyle?: any; 
+  @Input() customStyle?: any;
 
   onClick() {
-    if (!this.disabled) {
-      this.clicked.emit();
-    }
+    this.clicked.emit();
   }
 }

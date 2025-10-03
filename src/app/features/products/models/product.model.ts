@@ -5,7 +5,7 @@ export interface Product {
   category: string;
   description: string;
   discount: number; 
-  finalPrieWithDiscount: number; 
+  finalPriceWithDiscount: number;
   images: {
     imageId: string;
     filePath: string;

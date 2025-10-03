@@ -1,25 +1,36 @@
 <form [formGroup]="addProductForm" (ngSubmit)="onSubmit()" class="container">
   <h3 align="center" style="font-weight: bolder;">Add Product</h3>
 
-  <app-input [label]="'Product Name'" [placeholder]="'Enter product name'" [control]="addProductForm.controls.ProductName"
-    [customStyle]="{'margin-top': '20px'}"></app-input>
+  <app-input [label]="'Product Name'" [placeholder]="'Enter product name'"
+    [control]="addProductForm.controls.ProductName" [customStyle]="{'margin-top': '20px'}"
+    [readonly]="true"></app-input>
 
-  <app-input-select [control]="addProductForm.controls.ProductCategory" [options]="categories" [label]="'Categories'" [forlabel]="'Categories'"
-    [customStyle]="{'margin-top': '20px'}"></app-input-select>
+  <app-input [label]="'Price'" [type]="'number'" [placeholder]="'Enter price'"
+    [control]="addProductForm.controls.ProductCategory" [customStyle]="{'margin-top': '20px'}"
+    [readonly]="true"></app-input>
 
   <div class="row">
-    <app-input [label]="'Price'" [type]="'number'" [placeholder]="'Enter price'" [control]="addProductForm.controls.ProductPrice"
-      [customStyle]="{'margin-top': '20px'}"></app-input>
+    <app-input [label]="'Price'" [type]="'number'" [placeholder]="'Enter price'"
+      [control]="addProductForm.controls.ProductPrice" [customStyle]="{'margin-top': '20px'}"
+      [readonly]="true"></app-input>
 
-    <app-input [label]="'Discount'" [type]="'number'" [placeholder]="'Enter discount'" [control]="addProductForm.controls.ProductDiscount"
-      [customStyle]="{'margin-top': '20px'}"></app-input>
+    <app-input [label]="'Discount'" [type]="'number'" [placeholder]="'Enter discount'"
+      [control]="addProductForm.controls.ProductDiscount" [customStyle]="{'margin-top': '20px'}"
+      [readonly]="true"></app-input>
   </div>
 
-  <app-input [label]="'Description'" [placeholder]="'Enter product description'" [control]="addProductForm.controls.ProductDescription"
-    [customStyle]="{'margin-top': '20px'}"></app-input>
+  <app-input [label]="'Description'" [placeholder]="'Enter product description'"
+    [control]="addProductForm.controls.ProductDescription" [customStyle]="{'margin-top': '20px'}"
+    [readonly]="true"></app-input>
 
   <app-input [label]="'Image'" [type]="'file'" [control]="addProductForm.controls.ProductImage"
-    [customStyle]="{'margin-top': '20px'}"></app-input>
+    [customStyle]="{'margin-top': '20px'}" [readonly]="true"></app-input>
 
-  <app-button [type]="'submit'" [label]="'Add Product'" [customStyle]="{'margin-top': '20px'}"></app-button>
+    <div style="display: flex; justify-content: center;">
+      <app-button [type]="'button'" [label]="'Cancel'" [customStyle]="{'background-color':'grey', 'margin-top': '20px'}" (click)="closeModalState()"></app-button>
+      &nbsp; 
+    <app-button [type]="'submit'" [label]="'Update Product'" [customStyle]="{'margin-top': '20px'}"></app-button>
+
+    </div>
+
 </form>

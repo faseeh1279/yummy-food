@@ -9,12 +9,12 @@
 
         <!-- Custom content slot -->
         <div class="card-content">
-            <ng-content></ng-content>
+            <ng-content select="[card-content]"></ng-content>
         </div>
     </div>
 
     <!-- Footer slot (e.g., actions) -->
     <div class="card-footer">
-        <ng-content select="[footer]"></ng-content>
+        <ng-content select="[card-footer]"></ng-content>
     </div>
 </div>

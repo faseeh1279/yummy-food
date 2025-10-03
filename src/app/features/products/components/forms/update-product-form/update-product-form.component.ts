@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { AddProductDTO } from '../../../models/product.model';
+import { AddProductDTO, Product } from '../../../models/product.model';
 import { SharedModule } from "../../../../shared/shared.module";
 
 @Component({
@@ -11,8 +11,10 @@ import { SharedModule } from "../../../../shared/shared.module";
   standalone: false
 })
 export class UpdateProductFormComponent {
+  @Input() ProductData!: Product[];
   @Output() payload = new EventEmitter();
   @Input() categories!: string[];
+  @Output() closeModal = new EventEmitter<boolean>();
 
   addProductForm = new FormGroup({
     ProductName: new FormControl('', Validators.required),
@@ -22,7 +24,9 @@ export class UpdateProductFormComponent {
     ProductDescription: new FormControl('', Validators.required),
     ProductImage: new FormControl<File | null>(null, Validators.required),
   });
-
+  closeModalState = () => {
+    this.closeModal.emit(true);
+  }
   onSubmit = () => {
     if (this.addProductForm.invalid) {
       Swal.fire({

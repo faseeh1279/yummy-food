@@ -1,0 +1,10 @@
+<app-card [image]="productDetail?.images?.[0]?.filePath || ''" [title]="productDetail?.name">
+
+    <ul class="list-group list-group-flush" card-content>
+        <li class="list-group-item"> <strong>Price:</strong> ${{productDetail?.price}}</li>
+        <li class="list-group-item"> <strong>Discount:</strong> {{productDetail?.discount}}%</li>
+        <li class="list-group-item"> <strong>Category:</strong> {{productDetail?.category}}</li>
+        <li class="list-group-item"> <strong>Final Price:</strong> ${{productDetail?.finalPriceWithDiscount}}</li>
+        <li class="list-group-item"> <strong>Description:</strong> {{productDetail?.description}}</li>
+    </ul>
+</app-card>

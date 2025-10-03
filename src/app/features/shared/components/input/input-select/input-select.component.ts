@@ -14,4 +14,5 @@ export class InputSelectComponent {
   @Input() forlabel!: string; 
   @Input() label!: string; 
   @Input() customStyle?: any; 
+  @Input() readonly: boolean = false; 
 }

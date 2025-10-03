@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -8,10 +8,12 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 })
 export class ModalComponent {
   @Input() title!: string;
-  @Output() show = new EventEmitter<boolean>(); 
-  state: boolean = false 
+  @Input() subtitle?: string;
+  @Input() state: boolean = false;
+  @Output() stateChange = new EventEmitter<boolean>();
 
-  modalState = () => { 
-    this.show.emit(!this.state); 
+  closeModal() {
+    this.state = false;
+    this.stateChange.emit(this.state);
   }
 }

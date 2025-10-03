@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AddProductComponent } from './components/forms/add-product/add-product.component';
 import { ListProductPageComponent } from './pages/list-product-page/list-product-page.component';
 import { UpdateProductFormComponent } from './components/forms/update-product-form/update-product-form.component';
+import { ProductViewCardComponent } from './components/cards/product-view-card/product-view-card.component';
 
 
 const routes: Routes = [
@@ -25,7 +26,8 @@ const routes: Routes = [
     ProductsComponent, 
     AddProductComponent, 
     ListProductPageComponent, 
-    UpdateProductFormComponent
+    UpdateProductFormComponent, 
+    ProductViewCardComponent
   ],
   imports: [
     CommonModule,
